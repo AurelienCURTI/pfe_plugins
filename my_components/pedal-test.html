@@ -106,20 +106,27 @@
         this.setSwitchListener();
       },
       createAllInternNodes: function () {
-              //custom sound modification, here a Pizzicato delay
-              this.effect = new Pizzicato.Effects.Tremolo({
-    speed: 7,
-    depth: 0.8,
-    mix: 0.8
-});
-            },
+			//custom sound modification, here a Pizzicato delay
+			this.effect = new Pizzicato.Effects.Tremolo({
+			speed: 7,
+			depth: 0.8,
+			mix: 0.8
+		});
+		},
             setKnobsListeners: function() {
               var knobs = this.getElementsByTagName("webaudio-knob");
               var t = this;
               knobs[0].addEventListener('change', function (e) { t.effect.speed = e.target.value/100;});
               knobs[1].addEventListener('change', function (e) { t.effect.depth = e.target.value/100;});
               knobs[2].addEventListener('change', function (e) { t.effect.mix = e.target.value/100;});
-
+			  
+			  var knob1_set = {"effect":"speed","defaut-value":50,"min":10,"max":100,"increment":5}
+			  t.settings.push({"knob-linear1":knob1_set});
+			  var knob2_set = {"effect":"depth","defaut-value":30,"min":10,"max":100,"increment":5}
+			  t.settings.push({"knob-linear2":knob2_set});
+			  var knob3_set = {"effect":"mix","defaut-value":50,"min":10,"max":100,"increment":5}
+			  t.settings.push({"knob-linear3":knob3_set});
+			  
             },
             setRolesToKnobs:function () {
               var knobs = this.getElementsByTagName("webaudio-knob");
@@ -132,6 +139,7 @@
             },
             bypass: function() {
               this.effect.bypass();
+			  console.log(JSON.stringify(this.settings));
             },
             reactivate: function() {
               this.effect.reactivate();
@@ -140,7 +148,7 @@
               this.soundNodeIn.connect(this.effect);
               this.effect.connect(this.soundNodeOut);
             },
-            toJson:function(){
+            /*toJson:function(){
               var json = {
                 "effect":"Tremolo",
                 "nb_input":"1",
@@ -151,7 +159,7 @@
                 "switch1":"ON/OFF" 
               }; 
               JSON.stringify(json); //s'inverse avec JSON.parse();
-            }
+            }*/
           });
         </script>
       </dom-module>
