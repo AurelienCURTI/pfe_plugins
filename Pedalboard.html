@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Pedalboard 2017</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Quicksand">
+  <link rel="stylesheet" href="css/pedalboard.css">
+  
+   <!-- Imports polyfill -->
+  <script src="./bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+  
+  <script src="js/script.js"></script>
+  <script src="js/menu.js"></script>
+  <script src="js/drag.js"></script>
+  <script src="js/jacks.js"></script>
+  <script src="js/pedal.js"></script>
+  <script src="js/pedalboard.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/utils.js"></script>
+
+  <!-- import pizzicato -->
+  <script src="./js/Pizzicato_2.js"></script>
+   <!-- Imports custom element -->
+  <script src="my_components/pedal-behavior.js"></script>
+  <link rel="import" href="./my_components/pedal-delay.html">
+  <link rel="import" href="./my_components/pedal-quadrafuzz.html">
+  <link rel="import" href="./my_components/pedal-lowpass.html">
+  <link rel="import" href="./my_components/pedal-highpass.html">
+  <link rel="import" href="./my_components/pedal-flanger.html">
+
+</head>
+<body>
+  <header>
+    <span><a href="https://github.com/dl100463/TER-Pedalboard-creation">PedalBoard 2017</a></span>
+
+    <audio src="http://mainline.i3s.unice.fr/mooc/guitarRiff1.mp3" id="soundSample" controls loop crossorigin="anonymous"></audio>
+
+    <p>
+        <span>MICRO</span>
+        <webaudio-switch src="img/switch_toggle.png" class="id" id="mic" height="28" width="50" alt="Press to record" title="Press to record"></webaudio-switch>
+    </p>
+    
+  </header>
+
+  <div id="pedalboard-container">
+    <div id="pedalboard" ondragover="return false" ondrop="dropPedalHandler(event);"></div>
+  </div>
+  
+  <div class="div_app_tabs">
+    <div class="div_tabs" id="div_tabs">
+      <input id="tab-1" type="radio" name="input-tab" checked><label for="tab-1">delay</label>
+      <input id="tab-2" type="radio" name="input-tab"><label for="tab-2">lowpass</label>
+	  <input id="tab-3" type="radio" name="input-tab"><label for="tab-3">highpass</label>
+      <input id="tab-4" type="radio" name="input-tab"><label for="tab-4">quadra</label>
+      <input id="tab-5" type="radio" name="input-tab"><label for="tab-5">flanger</label>
+      
+      <div class="div_container">
+        <div id="content-1">
+          <div class="pedals">  
+            <div id="delay" class="pedal" draggable="true"></div>
+            <span>delay</span>
+          </div>
+        </div>
+		
+		 <div id="content-2">
+          <div class="pedals">  
+            <div id="lowpass" class="pedal" draggable="true"></div>
+            <span>lowpass</span>
+          </div>
+        </div>
+
+        <div id="content-3">
+          <div class="pedals">  
+            <div id="highpass" class="pedal" draggable="true"></div>
+            <span>highpass</span>
+          </div>
+        </div>
+
+        <div id="content-4">
+          <div class="pedals">  
+            <div id="quadra" class="pedal" draggable="true"></div>
+            <span>quadra</span>
+          </div>
+        </div>
+
+        <div id="content-5">
+          <div class="pedals">  
+            <div id="flanger" class="pedal" draggable="true"></div>
+            <span>flanger</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <nav id="context-menuJack" class="context-menu">
+      <ul id="menu-container" class="context-menu__items">
+      </ul>
+    </nav>
+  </div>
+  
+</body>
+</html>
