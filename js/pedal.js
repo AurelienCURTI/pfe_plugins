@@ -166,7 +166,7 @@ function dropPedalHandler(event) {
   //console.log("pedal dropped id = " + id + "x = " + event.clientX);
   // ICI GENERER UN ID UNIQUE !!! il peut y avoir plusieurs instances
   // de la même pédale
-  if (id == "delay" || id == "flanger" || id == "lowpass" || id == "highpass" || id == "quadra") {
+  if (id == "delay" || id == "flanger" || id == "lowpass" || id == "highpass" || id == "quadra" || id == "test") {
     let p, ptype;
     if (id == "delay") {
       p = new Pedal(id + uniqueID, getTokenPedal(), event.clientX-30-(135/2), event.clientY-10-(110/2), 135, 220, "pedal-delay");
@@ -178,6 +178,8 @@ function dropPedalHandler(event) {
       p = new Pedal(id + uniqueID, getTokenPedal(), event.clientX-30-(110/2), event.clientY-20-(245/2), 110, 245, "pedal-highpass");
     } else if (id == "quadra") {
       p = new Pedal(id + uniqueID, getTokenPedal(), event.clientX-30-(135/2), event.clientY-40-(275/2), 135, 275, "pedal-quadrafuzz");
+    } else if (id == "test") {
+      p = new Pedal(id + uniqueID, getTokenPedal(), event.clientX-30-(135/2), event.clientY-10-(110/2), 135, 220, "pedal-test");
     }
 
     uniqueID++;
@@ -193,6 +195,8 @@ function dropPedalHandler(event) {
       ptype = document.querySelector('pedal-highpass');
     } else if (id == "quadra") {
       ptype = document.querySelector('pedal-quadrafuzz');
+    } else if (id == "test") {
+      ptype = document.querySelector('pedal-test');
     }
 
     ptype.factoryImpl();

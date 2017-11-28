@@ -301,6 +301,13 @@ audio::-webkit-media-controls-time-remaining-display {
   margin-left:5%;
 }
 
+#test {
+  width:93px;
+  height:158px;
+  background-image:url("../img/test.png");
+  margin-left:5%;
+}
+
 /***** div_app_tabs *****/
 .div_app_tabs {
   background: repeating-linear-gradient(0deg,rgba(0,0,0,0.1),rgba(0,0,0,0.4));
@@ -353,7 +360,8 @@ audio::-webkit-media-controls-time-remaining-display {
 .div_app_tabs #content-2,
 .div_app_tabs #content-3,
 .div_app_tabs #content-4,
-.div_app_tabs #content-5 {
+.div_app_tabs #content-5,
+.div_app_tabs #content-6 {
   display:none;
 }
 
@@ -361,6 +369,7 @@ audio::-webkit-media-controls-time-remaining-display {
 .div_app_tabs #tab-2:checked ~ .div_container #content-2,
 .div_app_tabs #tab-3:checked ~ .div_container #content-3,
 .div_app_tabs #tab-4:checked ~ .div_container #content-4,
-.div_app_tabs #tab-5:checked ~ .div_container #content-5 {
+.div_app_tabs #tab-5:checked ~ .div_container #content-5,
+.div_app_tabs #tab-6:checked ~ .div_container #content-6 {
   display:flex;
 }
