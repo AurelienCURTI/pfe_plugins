@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Plugin</title>
+  <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Quicksand">
+  <link rel="stylesheet" href="css/pedalboard.css">-->
+  
+   <!-- Imports polyfill -->
+  <!--<script src="./bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>-->
+  
+  <!--<script src="js/script.js"></script>
+  <script src="js/menu.js"></script>
+  <script src="js/drag.js"></script>
+  <script src="js/jacks.js"></script>
+  <script src="js/pedal.js"></script>
+  <script src="js/pedalboard.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/utils.js"></script>-->
+  <script src="js/plugin.js"></script>
+
+  <!-- import pizzicato -->
+  <!--<script src="./js/Pizzicato_2.js"></script>-->
+  <!-- Imports custom element -->
+  <!--<script src="my_components/pedal-behavior.js"></script>
+  <link rel="import" href="./my_components/pedal-delay.html">
+  <link rel="import" href="./my_components/pedal-quadrafuzz.html">
+  <link rel="import" href="./my_components/pedal-lowpass.html">
+  <link rel="import" href="./my_components/pedal-highpass.html">
+  <link rel="import" href="./my_components/pedal-flanger.html">-->
+
+</head>
+<body>
+  <header>
+    <!--<audio src="http://mainline.i3s.unice.fr/mooc/guitarRiff1.mp3" id="soundSample" controls loop crossorigin="anonymous"></audio>-->
+    
+  </header>
+  
+  <label for="play">Frequence oscillo : </label>
+  <input id="oscillator_frequency" type="text" onchange="set_oscillator_freq()"><br>
+  <button id="start_btn" onclick="start()">Start</button>
+  <button id="stop_btn" onclick="stop()">Stop</button>
+</body>
+</html>
