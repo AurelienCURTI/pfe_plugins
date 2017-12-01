@@ -42,13 +42,27 @@
     </p>
     
   </header>
-  <!-- Le script en dessous permet d'ajouter un son sans passer par les pédales. Ici : un oscillateur 440hz -->
-<script>
-let audioContext = new AudioContext();
-let oscillator = audioContext.createOscillator();
-oscillator.connect(audioContext.destination);
-oscillator.start(audioContext.currentTime);
-</script>
+
+
+<div id="pedalboard-container">
+    <div id="pedalboard" ondragover="return false" ondrop="dropPedalHandler(event);"></div>
+  </div>
+  
+  <div class="div_app_tabs">
+    <div class="div_tabs" id="div_tabs">
+      <input id="tab-1" type="radio" name="input-tab" checked><label for="tab-1">Sound Menu</label>
+      <button onclick="oscil()">Oscillator</button>
+        <!-- Le script en dessous permet d'ajouter un son sans passer par les pédales. Ici : un oscillateur 440hz -->
+        <script>
+        function oscil(){
+          let audioContext = new AudioContext();
+          let oscillator = audioContext.createOscillator();
+          oscillator.connect(audioContext.destination);
+          oscillator.start(audioContext.currentTime);
+        }
+      </script>
+    </div>
+  </div>
 
   
   
