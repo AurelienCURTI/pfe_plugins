@@ -3,44 +3,63 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>Plugin</title>
-  <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <title>Sound Board</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Quicksand">
-  <link rel="stylesheet" href="css/pedalboard.css">-->
+  <link rel="stylesheet" href="../css/soundboard.css"> 
   
    <!-- Imports polyfill -->
-  <!--<script src="./bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>-->
+  <script src="../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
   
-  <!--<script src="js/script.js"></script>
+<!--   <script src="js/script.js"></script>
   <script src="js/menu.js"></script>
   <script src="js/drag.js"></script>
   <script src="js/jacks.js"></script>
   <script src="js/pedal.js"></script>
   <script src="js/pedalboard.js"></script>
   <script src="js/sound.js"></script>
-  <script src="js/utils.js"></script>-->
-  <script src="js/plugin.js"></script>
+  <script src="js/utils.js"></script> -->
+  <script src="js/plugin.js"></script> -->
 
-  <!-- import pizzicato -->
-  <!--<script src="./js/Pizzicato_2.js"></script>-->
-  <!-- Imports custom element -->
-  <!--<script src="my_components/pedal-behavior.js"></script>
+   <!-- Imports custom element -->
+<!--   <script src="my_components/pedal-behavior.js"></script>
   <link rel="import" href="./my_components/pedal-delay.html">
   <link rel="import" href="./my_components/pedal-quadrafuzz.html">
   <link rel="import" href="./my_components/pedal-lowpass.html">
   <link rel="import" href="./my_components/pedal-highpass.html">
-  <link rel="import" href="./my_components/pedal-flanger.html">-->
+  <link rel="import" href="./my_components/pedal-flanger.html">
+  <link rel="import" href="./my_components/pedal-test.html"> -->
 
 </head>
 <body>
   <header>
-    <!--<audio src="http://mainline.i3s.unice.fr/mooc/guitarRiff1.mp3" id="soundSample" controls loop crossorigin="anonymous"></audio>-->
+    <span><a href="https://github.com/AurelienCURTI/pfe_plugins">Sound Board</a></span>
+
+    <audio src="http://mainline.i3s.unice.fr/mooc/guitarRiff1.mp3" id="soundSample" controls loop crossorigin="anonymous"></audio>
+
+    <p>
+        <span>MICRO</span>
+        <webaudio-switch src="img/switch_toggle.png" class="id" id="mic" height="28" width="50" alt="Press to record" title="Press to record"></webaudio-switch>
+    </p>
     
   </header>
+
+
+<div id="pedalboard-container">
+    <div id="pedalboard" ondragover="return false" ondrop="dropPedalHandler(event);"></div>
+  </div>
   
-  <label for="play">Frequence oscillo : </label>
-  <input id="oscillator_frequency" type="text" onchange="set_oscillator_freq()"><br>
-  <button id="start_btn" onclick="start()">Start</button>
-  <button id="stop_btn" onclick="stop()">Stop</button>
+  <div class="div_app_tabs">
+    <div class="div_tabs" id="div_tabs">
+      <input id="tab-1" type="radio" name="input-tab" checked><label for="tab-1">Sound Menu</label>
+      <button onclick="start_oscil()">Oscillator</button>
+	  <button onclick="stop_oscil()">Stop</button>
+	  <input id="oscillator_frequency" type="text" onchange="set_oscillator_freq()" placeholder="Frequence"><br>
+    </div>
+  </div>
+
+  
+  
+  
 </body>
 </html>

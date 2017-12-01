@@ -12,10 +12,10 @@ function set_oscillator_freq(){
 	oscillateur.frequency.value = document.querySelector("#oscillator_frequency").value;
 }
 
-function start(){
+function start_oscil(){
 	oscillateur.start();
 }
 
-function stop(){
+function stop_oscil(){
 	oscillateur.stop();
 }
