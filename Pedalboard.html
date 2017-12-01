@@ -44,6 +44,11 @@
     </p>
     
   </header>
+  <!-- Le script en dessous permet d'ajouter un son sans passer par les pédales. Ici : un oscillateur 440hz -->
+<!--   <script>let audioContext = new AudioContext();
+let oscillator = audioContext.createOscillator();
+oscillator.connect(audioContext.destination);
+oscillator.start(audioContext.currentTime);</script> -->
 
   <div id="pedalboard-container">
     <div id="pedalboard" ondragover="return false" ondrop="dropPedalHandler(event);"></div>
@@ -57,7 +62,7 @@
       <input id="tab-4" type="radio" name="input-tab"><label for="tab-4">quadra</label>
       <input id="tab-5" type="radio" name="input-tab"><label for="tab-5">flanger</label>
       <input id="tab-6" type="radio" name="input-tab"><label for="tab-6">Test</label>
-      
+            
       <div class="div_container">
         <div id="content-1">
           <div class="pedals">  
