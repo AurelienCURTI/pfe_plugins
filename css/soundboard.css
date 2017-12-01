@@ -17,9 +17,9 @@ html, body {
 }
 
 body {
-  background: #222;
-  background-image: url('../img/background.jpg');
-
+  background: #555;
+  /*background-image: url('../img/background.jpg');
+*/
   display: flex;
   flex-direction: column;
 }
@@ -81,7 +81,7 @@ audio::-webkit-media-controls-time-remaining-display {
 #pedalboard {
  box-shadow: 0 2px 4px -1px rgba(0,0,0,0.6),0 4px 5px 0 rgba(0,0,0,0.06),0 1px 10px 0 rgba(0,0,0,0.6);
   background-color:maroon;
-  background-image: url('../img/background-pedalboard.jpg');
+ /* background-image: url('../img/background-pedalboard.jpg');*/
 
 
   height:700px;
@@ -176,7 +176,7 @@ audio::-webkit-media-controls-time-remaining-display {
 }
 
 .output {
-  background-image:url("../img/output.png");
+  /*background-image:url("../img/output.png");*/
   background-repeat:no-repeat;
   width:90px;
   height:20px;
@@ -184,7 +184,7 @@ audio::-webkit-media-controls-time-remaining-display {
 }
 
 .output:Hover {
-  background-image:url("../img/outputHover.png");
+  /*background-image:url("../img/outputHover.png");*/
   background-repeat:no-repeat;
   width:90px;
   height:20px;
@@ -192,7 +192,7 @@ audio::-webkit-media-controls-time-remaining-display {
 }
 
 .input {
-  background-image:url("../img/input.png");
+  /*background-image:url("../img/input.png");*/
   background-repeat:no-repeat;
   width:20px;
   height:20px;
@@ -200,7 +200,7 @@ audio::-webkit-media-controls-time-remaining-display {
 }
 
 .input:Hover {
-  background-image:url("../img/inputHover.png");
+  /*background-image:url("../img/inputHover.png");*/
   background-repeat:no-repeat;
   width:20px;
   height:20px;
@@ -252,7 +252,7 @@ audio::-webkit-media-controls-time-remaining-display {
 .context-menu__item1:hover {
   color: #fff;
   margin-left: 5px;
-  background-image:url("../img/RightJackHover.png");
+  /*background-image:url("../img/RightJackHover.png");*/
 }
 
 .context-menu__item2 {
@@ -270,42 +270,7 @@ audio::-webkit-media-controls-time-remaining-display {
 
 .context-menu__item2:hover {
   color: #fff;
-  background-image:url("../img/RightJackHoverL.png");
-}
-
-#delay {
-  width:109px;
-  height:159px;
-  background-image:url("../img/delay.png");
-  margin-left:5%;
-}
-
-#quadra {
-  width:90px;
-  height:160px;
-  background-image:url("../img/quadra_fuzz.png");
-  margin-left:5%;
-}
-
-#lowpass, #highpass {
-  width:85px;
-  height:162px;
-  background-image:url("../img/low_pass.png");
-  margin-left:5%;
-}
-
-#flanger {
-  width:150px;
-  height:162px;
-  background-image:url("../img/flanger.png");
-  margin-left:5%;
-}
-
-#test {
-  width:93px;
-  height:158px;
-  background-image:url("../img/test.png");
-  margin-left:5%;
+  /*background-image:url("../img/RightJackHoverL.png");*/
 }
 
 /***** div_app_tabs *****/

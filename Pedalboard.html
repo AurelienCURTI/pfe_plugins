@@ -27,7 +27,9 @@
   <link rel="import" href="./my_components/pedal-delay.html">
   <link rel="import" href="./my_components/pedal-quadrafuzz.html">
   <link rel="import" href="./my_components/pedal-lowpass.html">
+  <link rel="import" href="./my_components/pedal-highpass.html">
   <link rel="import" href="./my_components/pedal-flanger.html">
+  <link rel="import" href="./my_components/pedal-test.html">
 
 </head>
 <body>
@@ -42,6 +44,11 @@
     </p>
     
   </header>
+  <!-- Le script en dessous permet d'ajouter un son sans passer par les pédales. Ici : un oscillateur 440hz -->
+<!--   <script>let audioContext = new AudioContext();
+let oscillator = audioContext.createOscillator();
+oscillator.connect(audioContext.destination);
+oscillator.start(audioContext.currentTime);</script> -->
 
   <div id="pedalboard-container">
     <div id="pedalboard" ondragover="return false" ondrop="dropPedalHandler(event);"></div>
@@ -51,9 +58,11 @@
     <div class="div_tabs" id="div_tabs">
       <input id="tab-1" type="radio" name="input-tab" checked><label for="tab-1">delay</label>
       <input id="tab-2" type="radio" name="input-tab"><label for="tab-2">lowpass</label>
-      <input id="tab-3" type="radio" name="input-tab"><label for="tab-3">quadra</label>
-      <input id="tab-4" type="radio" name="input-tab"><label for="tab-4">flanger</label>
-      
+	  <input id="tab-3" type="radio" name="input-tab"><label for="tab-3">highpass</label>
+      <input id="tab-4" type="radio" name="input-tab"><label for="tab-4">quadra</label>
+      <input id="tab-5" type="radio" name="input-tab"><label for="tab-5">flanger</label>
+      <input id="tab-6" type="radio" name="input-tab"><label for="tab-6">Test</label>
+            
       <div class="div_container">
         <div id="content-1">
           <div class="pedals">  
@@ -61,8 +70,8 @@
             <span>delay</span>
           </div>
         </div>
-
-        <div id="content-2">
+		
+		 <div id="content-2">
           <div class="pedals">  
             <div id="lowpass" class="pedal" draggable="true"></div>
             <span>lowpass</span>
@@ -71,15 +80,29 @@
 
         <div id="content-3">
           <div class="pedals">  
-            <div id="quadra" class="pedal" draggable="true"></div>
-            <span>quadra</span>
+            <div id="highpass" class="pedal" draggable="true"></div>
+            <span>highpass</span>
           </div>
         </div>
 
         <div id="content-4">
           <div class="pedals">  
+            <div id="quadra" class="pedal" draggable="true"></div>
+            <span>quadra</span>
+          </div>
+        </div>
+
+        <div id="content-5">
+          <div class="pedals">  
             <div id="flanger" class="pedal" draggable="true"></div>
             <span>flanger</span>
+          </div>
+        </div>
+
+        <div id="content-6">
+          <div class="pedals">  
+            <div id="test" class="pedal" draggable="true"></div>
+            <span>test</span>
           </div>
         </div>
 

@@ -15,10 +15,14 @@
           value: function () {return Pizzicato.context.createGain(); }
         }
         ,
-        isOn: {
+        isOn : {
           type:Boolean,
           value: function() { return false; }
-        }
+        },
+		settings : {
+			type:Array,
+			value: function() { return []; }
+		}
 
       },
 
@@ -48,6 +52,8 @@
       **/
       setSwitchListener : function() {
         var t = this;
+	  var values_switch = {"switch_type":"ON/OFF"};
+	  this.settings.push({"Switch":values_switch});
         var swi = this.getElementsByTagName("webaudio-switch")[0];
         swi.addEventListener('change', function (e) {
           if (t.isOn)
@@ -55,7 +61,7 @@
           else
             t.reactivate();
           t.isOn = !t.isOn;
-
+			
         });
       }
       ,
