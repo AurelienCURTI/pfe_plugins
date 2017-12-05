@@ -1,33 +1,59 @@
-//Interface standard
-this.prototype =
-{
-	connect : function (ctx, nodeIn, nodeOut){},
-	disconnect : function disconnect(nodeIn, nodeOut){},
-	getParams : function getParams(){}
-};
-
 //variables globales 
 var highpassFilter;
 
-//Fonctions implementes
-function connect(ctx, nodeIn, nodeOut){
-	highpassFilter = ctx.createBiquadFilter();
-	highpassFilter.type = "highpass";
-	highpassFilter.connect(nodeIn);
-	highpassFilter.connect(nodeOut);
-}
+var highpassDoc = document.currentScript.ownerDocument; // Ici, la variable document correspond au document de index.html. Avec helloDoc, on s'assure de bien accéder le document de highpass.html
+var highpass_plugin = document.registerElement('highpass-plugin', {
+    prototype: Object.create(HTMLElement.prototype, {
+		container: {                 // optionnel si on n'a pas besoin de valeur par défaut
+			value: "body",        // valeur par défaut de l'attribut name
+			writable: true,
+			enumerable: true,
+			configurable: true
+		},
+		createdCallback: { // exécuté à chaque création d'un élément <hello-world>
+			value: function() {
+			  var root = this.createShadowRoot();
+			  var template = highpassDoc.querySelector('#hp_template'); // on cherche #template directement dans le DOM de hello-world.html
+			  var clone = document.importNode(template.content, true);
+			  var container = this.getAttribute("container"); //Data binding de la variable container
 
-function disconnect(nodeIn, nodeOut){
-	highpassFilter.connect(nodeIn);
-	highpassFilter.connect(nodeOut);
-}
+			  clone.querySelector('#show_component').onclick = function() {getRender(container)};
+			  
+			  //Envoi d'evenement
+				this.dispatchEvent(new Event('add_plugin'));
+			  
+			  root.appendChild(clone);
+			}	
+		},
+		connect: {
+			value: function(ctx, nodeIn, nodeOut){
+				highpassFilter = ctx.createBiquadFilter();
+				highpassFilter.type = "highpass";
+				nodeIn.connect(highpassFilter);
+				highpassFilter.connect(nodeOut);
+			}
+		},
+		disconnect: {
+			value: function(nodeIn, nodeOut){
+				highpassFilter.disconnect(nodeIn);
+				highpassFilter.disconnect(nodeOut);
+				nodeIn.connect(nodeOut);
+			}
+		},
+		getParams: {
+			value: function(){}
+		}
+	})
+  });
 
-function getParams(){
-	
+function getRender(id_div_to_append){
+	var template_component = highpassDoc.querySelector("#content_component");
+	document.querySelector(id_div_to_append).append(template_component);
 }
 
 function setFreq(val){
 	highpassFilter.frequency.value = parseInt(val);
+	document.querySelector("#freq_val").val = parseInt(val);
 }
 
 function setDetune(val){

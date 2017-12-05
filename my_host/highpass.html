@@ -27,7 +27,20 @@
 
 </head>
 <body>
-	<label for="hpass_freq">Frequence</label>
-	<input id="hpass_freq" type="range" onInput="setFreq(this.value)">
+	<template id="hp_template">
+		<button id="show_component">Highpass_plugin</button>
+	</template>
+	
+	<div id="content_component">
+		<h2>HighPass</h2>
+		<label for="hpass_freq">Frequence</label>
+		<input id="hpass_freq" type=range oninput="setFreq(this.value)" min=1 max=10000 value=50/><span id="freq_val"><br>
+		<label for="hpass_detune">Detune</label>
+		<input id="hpass_detune" type=range onuinput="setDetune(this.value)" min=1 max=100 value=50/><br>
+		<label for="hpass_q">Q</label>
+		<input id="hpass_q" type="range" onInput="setQ(this.value)" min=1 max=100 value=50/><br>
+		<label for="hpass_gain">Gain</label>
+		<input id="hpass_gain" type=range oninput="setGain(this.value)" min=1 max=100 value=50/>
+	</div>
 </body>
 </html>

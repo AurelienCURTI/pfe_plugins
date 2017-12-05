@@ -19,7 +19,7 @@
   <script src="js/pedalboard.js"></script>
   <script src="js/sound.js"></script>
   <script src="js/utils.js"></script> -->
-  <script src="js/plugin.js"></script> -->
+  <script src="js/host.js"></script>
 
    <!-- Imports custom element -->
 <!--   <script src="my_components/pedal-behavior.js"></script>
@@ -29,6 +29,7 @@
   <link rel="import" href="./my_components/pedal-highpass.html">
   <link rel="import" href="./my_components/pedal-flanger.html">
   <link rel="import" href="./my_components/pedal-test.html"> -->
+  <link rel="import" href="./highpass.html">
 
 </head>
 <body>
@@ -53,12 +54,14 @@
     <div class="div_tabs" id="div_tabs">
       <input id="tab-1" type="radio" name="input-tab" checked><label for="tab-1">Sound Menu</label>
       <button onclick="start_oscil()">Oscillator</button>
-    <button onclick="stop_oscil()">Stop</button>
-    <input id="oscillator_frequency" type="text" onchange="set_oscillator_freq()" placeholder="Frequence"><br>
+	  <button onclick="stop_oscil()">Stop</button>
+	  <input id="oscillator_frequency" type="text" onchange="set_oscillator_freq()" placeholder="Frequence"><br>
+	  <input type=range min=50 max=1000 value=300 oninput="changeLPfreq(this.value);">
+	  <highpass-plugin container="#pedalboard"></highpass-plugin>
     </div>
   </div>
 
-  <input type=range min=50 max=1000 value=300 oninput="changeLPfreq(this.value);">
+  
   
   
 </body>

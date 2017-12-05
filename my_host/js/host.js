@@ -1,3 +1,5 @@
+
+
 var ctxAudio = new (window.AudioContext || window.webkitAudioContext)();
 
 var oscillateur = ctxAudio.createOscillator();
@@ -59,3 +61,12 @@ function changeLPfreq(val) {
   
   lowpassFilter.frequency.value = val;
 }
+
+/********************************************************************/
+/********************************************************************/
+
+//Ecouteurs d'evenement
+document.addEventListener('add_plugin', function (event) {
+    var highpass = document.querySelector('highpass-plugin');
+	highpass.connect(ctxAudio, lowpassFilter, ctxAudio.destination);
+}, true);
