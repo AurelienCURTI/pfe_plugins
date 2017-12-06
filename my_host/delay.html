@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+   <!-- Imports polyfill -->
+  <script src="../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+  
+  <script src="js/delay_plug.js"></script>
+
+</head>
+<body>
+	<template id="hp_template">
+		<button id="show_component">delay_plugin</button>
+	</template>
+	
+	<div id="content_component">
+		<h2>Delay</h2>
+		<label for="delay_feedback">Delay Time</label>
+		<input id="delay_feedback" type=range oninput="setDelay(this.value)" min=1 max=100 value=50/><span id="feedback_val"><br>
+	</div>
+</body>
+</html>

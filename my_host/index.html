@@ -7,6 +7,8 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Quicksand">
   <link rel="stylesheet" href="../css/soundboard.css"> 
+  <link rel="import" href="http://webaudiomodules.org/synths/webdx7/wam-webdx7.html"/>
+
   
    <!-- Imports polyfill -->
   <script src="../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
@@ -22,17 +24,13 @@
   <script src="js/host.js"></script>
 
    <!-- Imports custom element -->
-<!--   <script src="my_components/pedal-behavior.js"></script>
-  <link rel="import" href="./my_components/pedal-delay.html">
-  <link rel="import" href="./my_components/pedal-quadrafuzz.html">
-  <link rel="import" href="./my_components/pedal-lowpass.html">
-  <link rel="import" href="./my_components/pedal-highpass.html">
-  <link rel="import" href="./my_components/pedal-flanger.html">
-  <link rel="import" href="./my_components/pedal-test.html"> -->
   <link rel="import" href="./highpass.html">
+  <link rel="import" href="./delay.html">
+  
 
 </head>
 <body>
+<wam-webdx7></wam-webdx7>
   <header>
     <span><a href="https://github.com/AurelienCURTI/pfe_plugins">Sound Board</a></span>
 
@@ -58,10 +56,9 @@
 	  <input id="oscillator_frequency" type="text" onchange="set_oscillator_freq()" placeholder="Frequence"><br>
 	  <input type=range min=50 max=1000 value=300 oninput="changeLPfreq(this.value);">
 	  <highpass-plugin container="#pedalboard"></highpass-plugin>
+    <delay-plugin container="#pedalboard"></delay-plugin>
     </div>
   </div>
-
-  
   
   
 </body>
