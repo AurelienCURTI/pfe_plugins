@@ -5,9 +5,8 @@
   <meta name="viewport" content="width=device-width">
   <title>Sound Board</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Quicksand">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Quicksand">
   <link rel="stylesheet" href="../css/soundboard.css"> 
-  <link rel="import" href="http://webaudiomodules.org/synths/webdx7/wam-webdx7.html"/>
 
   
    <!-- Imports polyfill -->
@@ -30,7 +29,6 @@
 
 </head>
 <body>
-<wam-webdx7></wam-webdx7>
   <header>
     <span><a href="https://github.com/AurelienCURTI/pfe_plugins">Sound Board</a></span>
 
@@ -50,13 +48,13 @@
   
   <div class="div_app_tabs">
     <div class="div_tabs" id="div_tabs">
-      <input id="tab-1" type="radio" name="input-tab" checked><label for="tab-1">Sound Menu</label>
-      <button onclick="start_oscil()">Oscillator</button>
-	  <button onclick="stop_oscil()">Stop</button>
-	  <input id="oscillator_frequency" type="text" onchange="set_oscillator_freq()" placeholder="Frequence"><br>
-	  <input type=range min=50 max=1000 value=300 oninput="changeLPfreq(this.value);">
-	  <highpass-plugin container="#pedalboard"></highpass-plugin>
-    <delay-plugin container="#pedalboard"></delay-plugin>
+		<input id="tab-1" type="radio" name="input-tab" checked><label for="tab-1">Sound Menu</label>
+		<button onclick="start_oscil()">Oscillator</button>
+		<button onclick="stop_oscil()">Stop</button>
+		<input id="oscillator_frequency" type="text" onchange="set_oscillator_freq()" placeholder="Frequence"><br>
+		<input type=range min=50 max=1000 value=300 oninput="changeLPfreq(this.value);">
+		<highpass-plugin></highpass-plugin>
+		<delay-plugin></delay-plugin>
     </div>
   </div>
   

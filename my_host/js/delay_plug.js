@@ -10,19 +10,27 @@ var delay_plugin = document.registerElement('delay-plugin', {
 			enumerable: true,
 			configurable: true
 		},
-		createdCallback: { // exécuté à chaque création d'un élément <hello-world>
+		getRender: {
+			value: function(id_div_to_append){
+				var template_component = delayDoc.querySelector("#content_component").innerHTML;
+				document.querySelector(id_div_to_append).innerHTML += template_component;
+			}
+		},
+		createdCallback: { // exécuté à chaque création d'un élément 
 			value: function() {
-			  var root = this.createShadowRoot();
-			  var template = delayDoc.querySelector('#hp_template'); // on cherche #template directement dans le DOM de hello-world.html
-			  var clone = document.importNode(template.content, true);
-			  var container = this.getAttribute("container"); //Data binding de la variable container
+				var root = this.createShadowRoot();
+				var template = delayDoc.querySelector('#hp_template'); // on cherche #template directement dans le DOM du plugin
+				var clone = document.importNode(template.content, true);
+				var container = this.getAttribute("container"); //Data binding de la variable container
 
-			  clone.querySelector('#show_component').onclick = function() {getRender(container)};
-			  
-			  //Envoi d'evenement
-				this.dispatchEvent(new Event('add_plugin'));
-			  
-			  root.appendChild(clone);
+				//clone.querySelector('#show_component').onclick = function() {this.getRender(container)};
+
+				//Envoi d'evenement
+				var evt = highpassDoc.createEvent("CustomEvent");
+				evt.initCustomEvent("add_plugin", true, true, this);
+				this.dispatchEvent(evt);
+
+				root.appendChild(clone);
 			}	
 		},
 		connect: {
@@ -42,17 +50,22 @@ var delay_plugin = document.registerElement('delay-plugin', {
 		},
 		getParams: {
 			value: function(){}
+		},
+		getPluginName:	{
+			value: function(){
+				return "delay-plugin";
+			}
 		}
 	})
   });
 
-function getRender(id_div_to_append){
-	var template_component = delayDoc.querySelector("#content_component");
-	document.querySelector(id_div_to_append).append(template_component);
-}
+/*function getRender(id_div_to_append){
+	var template_component = delayDoc.querySelector("#content_component").innerHTML;
+	document.querySelector(id_div_to_append).innerHTML += template_component;
+}*/
 
 function setDelay(val){
-	delayFilter.delayTime.value = parseInt(val);
-	document.querySelector("#delay_val").val = parseInt(val);
+	delayFilter.delayTime.value = parseFloat(val);
+	document.querySelector("#feedback_val").innerText = parseFloat(val);
 }
 

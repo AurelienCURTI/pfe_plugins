@@ -4,25 +4,20 @@ var highpassFilter;
 var highpassDoc = document.currentScript.ownerDocument; // Ici, la variable document correspond au document de index.html. Avec helloDoc, on s'assure de bien accéder le document de highpass.html
 var highpass_plugin = document.registerElement('highpass-plugin', {
     prototype: Object.create(HTMLElement.prototype, {
-		container: {                 // optionnel si on n'a pas besoin de valeur par défaut
-			value: "body",        // valeur par défaut de l'attribut name
-			writable: true,
-			enumerable: true,
-			configurable: true
-		},
+		
 		createdCallback: { // exécuté à chaque création d'un élément <hello-world>
 			value: function() {
-			  var root = this.createShadowRoot();
-			  var template = highpassDoc.querySelector('#hp_template'); // on cherche #template directement dans le DOM de hello-world.html
-			  var clone = document.importNode(template.content, true);
-			  var container = this.getAttribute("container"); //Data binding de la variable container
+				var root = this.createShadowRoot();
+				var template = highpassDoc.querySelector('#hp_template'); // on cherche #template directement dans le DOM de hello-world.html
+				var clone = document.importNode(template.content, true);
+				var container = this.getAttribute("container"); //Data binding de la variable container
 
-			  clone.querySelector('#show_component').onclick = function() {getRender(container)};
+				//Envoi d'evenement
+				var evt = highpassDoc.createEvent("CustomEvent");
+				evt.initCustomEvent("add_plugin", true, true, this);
+				this.dispatchEvent(evt);
 			  
-			  //Envoi d'evenement
-				this.dispatchEvent(new Event('add_plugin'));
-			  
-			  root.appendChild(clone);
+				root.appendChild(clone);
 			}	
 		},
 		connect: {
@@ -42,28 +37,37 @@ var highpass_plugin = document.registerElement('highpass-plugin', {
 		},
 		getParams: {
 			value: function(){}
+		},
+		getRender: {
+			value: function(id_div_to_append){
+				var template_component = highpassDoc.querySelector("#content_component").innerHTML;
+				document.querySelector(id_div_to_append).innerHTML += template_component;
+			}
+		},
+		getPluginName:	{
+			value: function(){
+				return "highpass-plugin";
+			}
 		}
 	})
   });
 
-function getRender(id_div_to_append){
-	var template_component = highpassDoc.querySelector("#content_component");
-	document.querySelector(id_div_to_append).append(template_component);
-}
-
 function setFreq(val){
 	highpassFilter.frequency.value = parseInt(val);
-	document.querySelector("#freq_val").val = parseInt(val);
+	document.querySelector("#freq_val").innerText = parseInt(val);
 }
 
 function setDetune(val){
 	highpassFilter.detune.value = parseInt(val);
+	document.querySelector("#detune_val").innerText = parseInt(val);
 }
 
 function setGain(val){
 	highpassFilter.gain.value = parseInt(val);
+	document.querySelector("#gain_val").innerText = parseInt(val);
 }
 
 function setQ(val){
 	highpassFilter.Q.value = parseInt(val);
+	document.querySelector("#Q_val").innerText = parseInt(val);
 }

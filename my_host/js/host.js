@@ -1,6 +1,8 @@
 
 
 var ctxAudio = new (window.AudioContext || window.webkitAudioContext)();
+//Tableau contenant tous les plugins
+var plugins = new Array();
 
 var oscillateur = ctxAudio.createOscillator();
 
@@ -67,6 +69,13 @@ function changeLPfreq(val) {
 
 //Ecouteurs d'evenement
 document.addEventListener('add_plugin', function (event) {
-    var highpass = document.querySelector('highpass-plugin');
-	highpass.connect(ctxAudio, lowpassFilter, ctxAudio.destination);
+	
+	var plugin_name = event.detail.getPluginName();
+	plugins.push(event.detail);
+	
+	document.querySelector(plugin_name).onclick = function() {
+		event.detail.getRender("#pedalboard");
+		event.detail.connect(ctxAudio, source, ctxAudio.destination);
+	};
+	
 }, true);
