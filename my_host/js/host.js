@@ -70,12 +70,12 @@ function changeLPfreq(val) {
 //Ecouteurs d'evenement
 document.addEventListener('add_plugin', function (event) {
 	
-	var plugin_name = event.detail.getPluginName();
-	plugins.push(event.detail);
+	var plugin_name = event.target.getPluginName();
+	plugins.push(event.target);
 	
 	document.querySelector(plugin_name).onclick = function() {
-		event.detail.getRender("#pedalboard");
-		event.detail.connect(ctxAudio, source, ctxAudio.destination);
+		event.target.getRender(event.target, "#pedalboard");
+		event.target.connect(ctxAudio, source, ctxAudio.destination);
 	};
 	
 }, true);

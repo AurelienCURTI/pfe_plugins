@@ -6,24 +6,7 @@
    <!-- Imports polyfill -->
   <script src="../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
   
-<!--   <script src="js/script.js"></script>
-  <script src="js/menu.js"></script>
-  <script src="js/drag.js"></script>
-  <script src="js/jacks.js"></script>
-  <script src="js/pedal.js"></script>
-  <script src="js/pedalboard.js"></script>
-  <script src="js/sound.js"></script>
-  <script src="js/utils.js"></script> -->
   <script src="js/highpass_plug.js"></script>
-
-   <!-- Imports custom element -->
-<!--   <script src="my_components/pedal-behavior.js"></script>
-  <link rel="import" href="./my_components/pedal-delay.html">
-  <link rel="import" href="./my_components/pedal-quadrafuzz.html">
-  <link rel="import" href="./my_components/pedal-lowpass.html">
-  <link rel="import" href="./my_components/pedal-highpass.html">
-  <link rel="import" href="./my_components/pedal-flanger.html">
-  <link rel="import" href="./my_components/pedal-test.html"> -->
 
 </head>
 <body>
@@ -34,13 +17,13 @@
 	<div id="content_component">
 		<h2>HighPass</h2>
 		<label for="hpass_freq">Frequence</label>
-		<input id="hpass_freq" type=range oninput="setFreq(this.value)" min=1 max=10000 value=50/><span id="freq_val"></span><br>
+		<input id="hpass_freq" type=range min=1 max=10000 value=50/><span id="freq_val"></span><br>
 		<label for="hpass_detune">Detune</label>
-		<input id="hpass_detune" type=range oninput="setDetune(this.value)" min=1 max=100 value=50/><span id="detune_val"></span><br>
+		<input id="hpass_detune" type=range min=1 max=100 value=50/><span id="detune_val"></span><br>
 		<label for="hpass_q">Q</label>
-		<input id="hpass_q" type="range" onInput="setQ(this.value)" min=1 max=100 value=50/><span id="Q_val"></span><br>
+		<input id="hpass_q" type="range" min=1 max=100 value=50/><span id="Q_val"></span><br>
 		<label for="hpass_gain">Gain</label>
-		<input id="hpass_gain" type=range oninput="setGain(this.value)" min=1 max=100 value=50/><span id="gain_val"></span>
+		<input id="hpass_gain" type=range min=0 max=1 value=50 step=0.01><span id="gain_val"></span>
 	</div>
 </body>
 </html>
