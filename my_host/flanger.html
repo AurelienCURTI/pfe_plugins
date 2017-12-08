@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+   <!-- Imports polyfill -->
+  <script src="../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+  
+  <script src="js/flanger_plug.js"></script>
+
+</head>
+<body>
+	<template id="hp_template">
+		<button id="show_component">flanger_plugin</button>
+	</template>
+	
+	<div id="content_component">
+		<h2>Flanger</h2>
+		<label for="flanger_time">Time</label>
+		<input id="flanger_time" type=range oninput="setTime(this.value)" min=0 max=1 step=0.01 value=0/><span id="time_val"></span><br>
+		<label for="flanger_speed">Speed</label>
+		<input id="flanger_speed" type=range oninput="setSpeed(this.value)" min=0 max=1 step=0.01 value=0/><span id="speed_val"></span><br>
+		<label for="flanger_depth">Depth</label>
+		<input id="flanger_depth" type=range oninput="setDepth(this.value)" min=0 max=1 step=0.01 value=0/><span id="depth_val"></span><br>
+		<label for="flanger_feedback">Feedback</label>
+		<input id="flanger_feedback" type=range oninput="setFeedback(this.value)" min=0 max=1 step=0.01 value=0/><span id="feedback_val"></span><br>
+		<!-- <label for="flanger_mix">Mix</label>
+		<input id="flanger_mix" type=range oninput="setMix(this.value)" min=0 max=1 step=0.01 value=0/><span id="mix_val"></span><br> -->
+	</div>
+</body>
+</html>
