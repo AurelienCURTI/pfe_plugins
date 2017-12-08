@@ -2,20 +2,25 @@ var delayDoc = document.currentScript.ownerDocument;
 var delay_plugin = document.registerElement('delay-plugin', {
     prototype: Object.create(HTMLElement.prototype, {
 		audioCtx: {
-			value: null,        // valeur par défaut de l'attribut
+			value: null,
 			writable: true,
 			enumerable: true,
 			configurable: true
 		},
-		delayFilter: {
-			value: null,        // valeur par défaut de l'attribut
+		delayFilterNode: {
+			value: null,
 			writable: true,
 			enumerable: true,
 			configurable: true
 		},
-		
-		container: {                 // optionnel si on n'a pas besoin de valeur par défaut
-			value: "body",        // valeur par défaut de l'attribut name
+		gainNode: {
+			value: null,
+			writable: true,
+			enumerable: true,
+			configurable: true
+		},
+		container: {
+			value: "body",
 			writable: true,
 			enumerable: true,
 			configurable: true
@@ -38,16 +43,18 @@ var delay_plugin = document.registerElement('delay-plugin', {
 		connect: {
 			value: function(ctx, src, dest){
 				this.audioCtx = ctx;
-				this.delayFilter = this.audioCtx.createDelay();
-				this.delayFilter.type = "delay";
-				src.connect(this.delayFilter);
-				this.delayFilter.connect(dest);
+				this.delayFilterNode = this.audioCtx.createDelay();
+				this.delayFilterNode.type = "delay";
+				this.gainNode = this.audioCtx.createGain();
+				src.connect(this.delayFilterNode);
+				this.delayFilterNode.connect(this.gainNode);
+				this.gainNode.connect(dest);
 			}
 		},
 		disconnect: {
 			value: function(src, dest){
-				this.delayFilter.disconnect(dest);
-				this.delayFilter.disconnect(dest);
+				this.delayFilterNode.disconnect(dest);
+				this.delayFilterNode.disconnect(dest);
 				src.connect(dest);
 			}
 		},
@@ -55,11 +62,17 @@ var delay_plugin = document.registerElement('delay-plugin', {
 			value: function(obj, id_div_to_append){
 				var template_component = delayDoc.querySelector("#content_component").innerHTML;
 				document.querySelector(id_div_to_append).innerHTML += template_component;
-				//Set listeners to sliders
+				//Set listeners on buttons et sliders
 				document.querySelector('#delay_feedback').oninput = function (){
 					var val = parseFloat(document.querySelector('#delay_feedback').value);
 					obj.setParam('delay', val);
 					document.querySelector("#feedback_val").innerText = val;
+				}
+				document.querySelector('#activate').onclick = function (){
+					obj.activate();
+				}
+				document.querySelector('#disable').onclick = function (){
+					obj.bypass();
 				}
 				
 			}
@@ -76,14 +89,29 @@ var delay_plugin = document.registerElement('delay-plugin', {
 			value: function(param, val) {
 				switch(param){
 					case "delay":
-						this.delayFilter.delayTime.setValueAtTime(parseFloat(val), null);
+						this.delayFilterNode.delayTime.setValueAtTime(parseFloat(val), null);
 					break;
 					default:
 						console.log("Le parametre specifie est inconnu.");
 					break;
 				};
 			}
+		},
+		activate: {
+			value: function(){
+				if(this.gainNode.gain != 1){
+					this.gainNode.gain.setValueAtTime(1, null);
+				}
+			}
+		},
+		bypass : {
+			value: function(){
+				if(this.gainNode.gain != 0){
+					this.gainNode.gain.setValueAtTime(0, null);
+				}
+			}
 		}
+		
 	})
   });
 

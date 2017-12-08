@@ -7,8 +7,14 @@ var highpass_plugin = document.registerElement('highpass-plugin', {
 			enumerable: true,
 			configurable: true
 		},
-		highpassFilter: {
+		highpassFilterNode: {
 			value: null,        // valeur par défaut de l'attribut
+			writable: true,
+			enumerable: true,
+			configurable: true
+		},
+		gainNode: {
+			value: null,
 			writable: true,
 			enumerable: true,
 			configurable: true
@@ -30,16 +36,19 @@ var highpass_plugin = document.registerElement('highpass-plugin', {
 		},
 		connect: {
 			value: function(ctx, src, dest){
-				this.highpassFilter = ctx.createBiquadFilter();
-				this.highpassFilter.type = "highpass";
-				src.connect(this.highpassFilter);
-				this.highpassFilter.connect(dest);
+				this.audioCtx = ctx;
+				this.highpassFilterNode = this.audioCtx.createBiquadFilter();
+				this.highpassFilterNode.type = "highpass";
+				this.gainNode = this.audioCtx.createGain();
+				src.connect(this.highpassFilterNode);
+				this.highpassFilterNode.connect(this.gainNode);
+				this.gainNode.connect(dest);
 			}
 		},
 		disconnect: {
 			value: function(src, dest){
-				this.highpassFilter.disconnect(src);
-				this.highpassFilter.disconnect(dest);
+				this.highpassFilterNode.disconnect(src);
+				this.highpassFilterNode.disconnect(dest);
 				src.connect(dest);
 			}
 		},
@@ -50,7 +59,7 @@ var highpass_plugin = document.registerElement('highpass-plugin', {
 			value: function(obj, id_div_to_append){
 				var template_component = highpassDoc.querySelector("#content_component").innerHTML;
 				document.querySelector(id_div_to_append).innerHTML += template_component;
-				//Set listener to sliders
+				//Set listeners on buttons and sliders
 				document.querySelector('#hpass_freq').oninput = function (){
 					var val = parseInt(document.querySelector('#hpass_freq').value);
 					obj.setParam('freq', val);
@@ -71,6 +80,12 @@ var highpass_plugin = document.registerElement('highpass-plugin', {
 					obj.setParam('gain', val);
 					document.querySelector("#gain_val").innerText = val;
 				}
+				document.querySelector('#activate').onclick = function (){
+					obj.activate();
+				}
+				document.querySelector('#disable').onclick = function (){
+					obj.bypass();
+				}
 			}
 		},
 		getPluginName:	{
@@ -82,21 +97,35 @@ var highpass_plugin = document.registerElement('highpass-plugin', {
 			value: function(param, val) {
 				switch(param){
 					case "freq":
-						this.highpassFilter.frequency.setValueAtTime(parseInt(val), null);
+						this.highpassFilterNode.frequency.setValueAtTime(parseInt(val), null);
 					break;
 					case "detune":
-						this.highpassFilter.detune.setValueAtTime(parseInt(val), null);
+						this.highpassFilterNode.detune.setValueAtTime(parseInt(val), null);
 					break;
 					case "gain":
-						this.highpassFilter.gain.setValueAtTime(parseFloat(val), null);
+						this.highpassFilterNode.gain.setValueAtTime(parseFloat(val), null);
 					break;
 					case "Q":
-						this.highpassFilter.Q.setValueAtTime(parseInt(val), null);
+						this.highpassFilterNode.Q.setValueAtTime(parseInt(val), null);
 					break;
 					default:
 						console.log("Le parametre specifie est inconnu.");
 					break;
 				};
+			}
+		},
+		activate: {
+			value: function(){
+				if(this.gainNode.gain != 1){
+					this.gainNode.gain.setValueAtTime(1, null);
+				}
+			}
+		},
+		bypass : {
+			value: function(){
+				if(this.gainNode.gain != 0){
+					this.gainNode.gain.setValueAtTime(0, null);
+				}
 			}
 		}
 	})
