@@ -64,18 +64,29 @@ function changeLPfreq(val) {
   lowpassFilter.frequency.value = val;
 }
 
+function addPlugin(plugin_name){
+	switch(plugin_name){
+		case 'delay':
+			document.querySelector('#pedalboard').innerHTML += '<delay-plugin></delay-plugin>';
+		break;
+		case 'highpass':
+			document.querySelector('#pedalboard').innerHTML += '<highpass-plugin></highpass-plugin>';
+		break;
+		
+		default:
+			console.log('Plugin inconnu.');
+		break;
+		
+	}
+}
+
 /********************************************************************/
 /********************************************************************/
 
 //Ecouteurs d'evenement
-document.addEventListener('add_plugin', function (event) {
-	
+document.addEventListener('add_plugin', function (event){
 	var plugin_name = event.target.getPluginName();
 	plugins.push(event.target);
 	
-	document.querySelector(plugin_name).onclick = function() {
-		event.target.getRender(event.target, "#pedalboard");
-		event.target.connect(ctxAudio, source, ctxAudio.destination);
-	};
-	
+	event.target.connect(ctxAudio, source, ctxAudio.destination);
 }, true);

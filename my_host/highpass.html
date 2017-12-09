@@ -11,21 +11,17 @@
 </head>
 <body>
 	<template id="hp_template">
-		<button id="show_component">Highpass_plugin</button>
-	</template>
-	
-	<div id="content_component">
 		<h2>HighPass</h2>
 		<label for="hpass_freq">Frequence</label>
-		<input id="hpass_freq" type=range min=1 max=10000 value=50/><span id="freq_val"></span><br>
+		<input id="hpass_freq" type=range oninput="document.querySelector('highpass-plugin').setParam('freq', this.value)" min=1 max=10000 value=50/><span id="freq_val">0</span><br/>
 		<label for="hpass_detune">Detune</label>
-		<input id="hpass_detune" type=range min=1 max=100 value=50/><span id="detune_val"></span><br>
+		<input id="hpass_detune" type=range oninput="document.querySelector('highpass-plugin').setParam('detune', this.value)" min=1 max=100 value=50/><span id="detune_val">0</span><br/>
 		<label for="hpass_q">Q</label>
-		<input id="hpass_q" type="range" min=1 max=100 value=50/><span id="Q_val"></span><br>
+		<input id="hpass_q" type=range oninput="document.querySelector('highpass-plugin').setParam('Q', this.value)" min=1 max=100 value=50/><span id="Q_val">0</span><br/>
 		<label for="hpass_gain">Gain</label>
-		<input id="hpass_gain" type=range min=0 max=1 value=50 step=0.01><span id="gain_val"></span>
-		<button id="activate">ON</button>
-		<button id="disable">OFF</button>
-	</div>
+		<input id="hpass_gain" type=range oninput="document.querySelector('highpass-plugin').setParam('gain', this.value)" min=0 max=1 value=50 step=0.01><span id="gain_val">0</span><br/>
+		<button id="activate" onclick="document.querySelector('highpass-plugin').activate()">ON</button>
+		<button id="disable" onclick="document.querySelector('highpass-plugin').bypass()">OFF</button>
+	</template>
 </body>
 </html>

@@ -55,9 +55,8 @@
 		<button onclick="stop_oscil()">Stop</button>
 		<input id="oscillator_frequency" type="text" onchange="set_oscillator_freq()" placeholder="Frequence"><br>
 		<input type=range min=50 max=1000 value=300 oninput="changeLPfreq(this.value);">
-		<highpass-plugin></highpass-plugin>
-		<delay-plugin></delay-plugin>
-    <flanger-plugin></flanger-plugin>
+		<button onclick="addPlugin('delay')">Delay</button>
+		<button onclick="addPlugin('highpass')">Highpass</button>
     </div>
   </div>
   

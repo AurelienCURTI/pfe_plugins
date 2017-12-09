@@ -28,12 +28,12 @@ var delay_plugin = document.registerElement('delay-plugin', {
 		createdCallback: { // exécuté à chaque création d'un élément 
 			value: function() {
 				var root = this.createShadowRoot();
-				var template = delayDoc.querySelector('#hp_template'); // on cherche #template directement dans le DOM du plugin
+				var template = delayDoc.querySelector('#delay_template'); // on cherche #template directement dans le DOM du plugin
 				var clone = document.importNode(template.content, true);
 				var container = this.getAttribute("container"); //Data binding de la variable container
-
+				
 				//Envoi d'evenement
-				var evt = highpassDoc.createEvent("CustomEvent");
+				var evt = delayDoc.createEvent("CustomEvent");
 				evt.initCustomEvent("add_plugin", true, true, this);
 				this.dispatchEvent(evt);
 
@@ -59,23 +59,7 @@ var delay_plugin = document.registerElement('delay-plugin', {
 			}
 		},
 		getRender: {
-			value: function(obj, id_div_to_append){
-				var template_component = delayDoc.querySelector("#content_component").innerHTML;
-				document.querySelector(id_div_to_append).innerHTML += template_component;
-				//Set listeners on buttons et sliders
-				document.querySelector('#delay_feedback').oninput = function (){
-					var val = parseFloat(document.querySelector('#delay_feedback').value);
-					obj.setParam('delay', val);
-					document.querySelector("#feedback_val").innerText = val;
-				}
-				document.querySelector('#activate').onclick = function (){
-					obj.activate();
-				}
-				document.querySelector('#disable').onclick = function (){
-					obj.bypass();
-				}
-				
-			}
+			value: function(){}
 		},
 		getParams: {
 			value: function(){}
@@ -90,6 +74,7 @@ var delay_plugin = document.registerElement('delay-plugin', {
 				switch(param){
 					case "delay":
 						this.delayFilterNode.delayTime.setValueAtTime(parseFloat(val), null);
+						document.querySelector('delay-plugin').shadowRoot.querySelector('#delay_val').innerHTML = parseFloat(val);
 					break;
 					default:
 						console.log("Le parametre specifie est inconnu.");
