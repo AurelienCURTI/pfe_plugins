@@ -19,7 +19,7 @@ var highpass_plugin = document.registerElement('highpass-plugin', {
 			enumerable: true,
 			configurable: true
 		},
-		createdCallback: { // exécuté à chaque création d'un élément <hello-world>
+		createdCallback: { // exécuté à chaque création d'un élément
 			value: function() {
 				var root = this.createShadowRoot();
 				var template = highpassDoc.querySelector('#hp_template'); // on cherche #template directement dans le DOM de hello-world.html

@@ -31,13 +31,23 @@ var delay_plugin = document.registerElement('delay-plugin', {
 				var template = delayDoc.querySelector('#delay_template'); // on cherche #template directement dans le DOM du plugin
 				var clone = document.importNode(template.content, true);
 				var container = this.getAttribute("container"); //Data binding de la variable container
+				var idComponent = this.id;
+				root.appendChild(clone);
+				//Set listeners
+				root.querySelector('#delay_slider').oninput = function(){
+					document.querySelector('delay-plugin#'+idComponent).setParam('delay', root.querySelector('#delay_slider').value);
+				};
+				root.querySelector('#activate').onclick = function(){
+					document.querySelector('delay-plugin#'+idComponent).activate();
+				};
+				root.querySelector('#disable').onclick = function(){
+					document.querySelector('delay-plugin#'+idComponent).bypass();
+				};
 				
 				//Envoi d'evenement
 				var evt = delayDoc.createEvent("CustomEvent");
-				evt.initCustomEvent("add_plugin", true, true, this);
+				evt.initCustomEvent("add_plugin", false, false, this);
 				this.dispatchEvent(evt);
-
-				root.appendChild(clone);
 			}	
 		},
 		connect: {
@@ -53,7 +63,7 @@ var delay_plugin = document.registerElement('delay-plugin', {
 		},
 		disconnect: {
 			value: function(src, dest){
-				this.delayFilterNode.disconnect(dest);
+				this.delayFilterNode.disconnect(src);
 				this.delayFilterNode.disconnect(dest);
 				src.connect(dest);
 			}
@@ -74,7 +84,7 @@ var delay_plugin = document.registerElement('delay-plugin', {
 				switch(param){
 					case "delay":
 						this.delayFilterNode.delayTime.setValueAtTime(parseFloat(val), null);
-						document.querySelector('delay-plugin').shadowRoot.querySelector('#delay_val').innerHTML = parseFloat(val);
+						document.querySelector('delay-plugin#'+this.id).shadowRoot.querySelector('#delay_val').innerHTML = parseFloat(val);
 					break;
 					default:
 						console.log("Le parametre specifie est inconnu.");

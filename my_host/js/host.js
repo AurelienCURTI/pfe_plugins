@@ -67,7 +67,8 @@ function changeLPfreq(val) {
 function addPlugin(plugin_name){
 	switch(plugin_name){
 		case 'delay':
-			document.querySelector('#pedalboard').innerHTML += '<delay-plugin></delay-plugin>';
+			var count = document.querySelectorAll('delay-plugin').length;
+			document.querySelector('#pedalboard').innerHTML += '<delay-plugin id="delay-plugin-'+count+'"></delay-plugin>';
 		break;
 		case 'highpass':
 			document.querySelector('#pedalboard').innerHTML += '<highpass-plugin></highpass-plugin>';
@@ -88,5 +89,5 @@ document.addEventListener('add_plugin', function (event){
 	var plugin_name = event.target.getPluginName();
 	plugins.push(event.target);
 	
-	event.target.connect(ctxAudio, source, ctxAudio.destination);
+	event.detail.connect(ctxAudio, source, ctxAudio.destination);
 }, true);
