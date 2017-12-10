@@ -69,9 +69,12 @@ function addPlugin(plugin_name){
 		case 'delay':
 			var count = document.querySelectorAll('delay-plugin').length;
 			document.querySelector('#pedalboard').innerHTML += '<delay-plugin id="delay-plugin-'+count+'"></delay-plugin>';
+			// document.querySelector('delay-plugin#delay-plugin-'+count).connect(ctxAudio, source, ctxAudio.destination);
 		break;
 		case 'highpass':
-			document.querySelector('#pedalboard').innerHTML += '<highpass-plugin></highpass-plugin>';
+			var count = document.querySelectorAll('highpass-plugin').length;
+			document.querySelector('#pedalboard').innerHTML += '<highpass-plugin id="highpass-plugin-'+count+'"></highpass-plugin>';
+			// document.querySelector('highpass-plugin#highpass-plugin-'+count).connect(ctxAudio, source, ctxAudio.destination);
 		break;
 		
 		default:
@@ -88,6 +91,9 @@ function addPlugin(plugin_name){
 document.addEventListener('add_plugin', function (event){
 	var plugin_name = event.target.getPluginName();
 	plugins.push(event.target);
-	
-	event.detail.connect(ctxAudio, source, ctxAudio.destination);
+	console.log(plugins);
+	//console.log(document.querySelectorAll('#'+event.detail.id).length);
+	//if(document.querySelector(event.detail.id).length == 0){
+		event.target.connect(ctxAudio, source, ctxAudio.destination);
+	//}
 }, true);

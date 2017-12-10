@@ -1,14 +1,20 @@
 var highpassDoc = document.currentScript.ownerDocument; // Ici, la variable document correspond au document de index.html. Avec helloDoc, on s'assure de bien accéder le document de highpass.html
 var highpass_plugin = document.registerElement('highpass-plugin', {
     prototype: Object.create(HTMLElement.prototype, {
+		plugin_name: {
+			value: "highpass-plugin",
+			writable: false,
+			enumerable: true,
+			configurable: true
+		},
 		audioCtx: {
-			value: null,        // valeur par défaut de l'attribut
+			value: null,
 			writable: true,
 			enumerable: true,
 			configurable: true
 		},
 		highpassFilterNode: {
-			value: null,        // valeur par défaut de l'attribut
+			value: null,
 			writable: true,
 			enumerable: true,
 			configurable: true
@@ -24,13 +30,32 @@ var highpass_plugin = document.registerElement('highpass-plugin', {
 				var root = this.createShadowRoot();
 				var template = highpassDoc.querySelector('#hp_template'); // on cherche #template directement dans le DOM de hello-world.html
 				var clone = document.importNode(template.content, true);
-
+				var idComponent = this.id;
 				//Envoi d'evenement
 				var evt = highpassDoc.createEvent("CustomEvent");
 				evt.initCustomEvent("add_plugin", true, true, this);
 				this.dispatchEvent(evt);
 			  
 				root.appendChild(clone);
+				//Set listeners
+				root.querySelector('#hpass_freq').oninput = function(){
+					document.querySelector('highpass-plugin#'+idComponent).setParam('freq', root.querySelector('#hpass_freq').value);
+				};
+				root.querySelector('#hpass_detune').oninput = function(){
+					document.querySelector('highpass-plugin#'+idComponent).setParam('detune', root.querySelector('#hpass_detune').value);
+				};
+				root.querySelector('#hpass_q').oninput = function(){
+					document.querySelector('highpass-plugin#'+idComponent).setParam('Q', root.querySelector('#hpass_q').value);
+				};
+				root.querySelector('#hpass_gain').oninput = function(){
+					document.querySelector('highpass-plugin#'+idComponent).setParam('gain', root.querySelector('#hpass_gain').value);
+				};
+				root.querySelector('#activate').onclick = function(){
+					document.querySelector('highpass-plugin#'+idComponent).activate();
+				};
+				root.querySelector('#disable').onclick = function(){
+					document.querySelector('highpass-plugin#'+idComponent).bypass();
+				};
 			}	
 		},
 		connect: {
@@ -59,7 +84,7 @@ var highpass_plugin = document.registerElement('highpass-plugin', {
 		},
 		getPluginName:	{
 			value: function(){
-				return "highpass-plugin";
+				return this.plugin_name;
 			}
 		},
 		setParam: {
@@ -67,19 +92,19 @@ var highpass_plugin = document.registerElement('highpass-plugin', {
 				switch(param){
 					case "freq":
 						this.highpassFilterNode.frequency.setValueAtTime(parseInt(val), null);
-						document.querySelector('highpass-plugin').shadowRoot.querySelector('#freq_val').innerHTML = parseInt(val);
+						document.querySelector('highpass-plugin#'+this.id).shadowRoot.querySelector('#freq_val').innerHTML = parseInt(val);
 					break;
 					case "detune":
 						this.highpassFilterNode.detune.setValueAtTime(parseInt(val), null);
-						document.querySelector('highpass-plugin').shadowRoot.querySelector('#detune_val').innerHTML = parseInt(val);
-					break;
-					case "gain":
-						this.highpassFilterNode.gain.setValueAtTime(parseFloat(val), null);
-						document.querySelector('highpass-plugin').shadowRoot.querySelector('#gain_val').innerHTML = parseFloat(val);
+						document.querySelector('highpass-plugin#'+this.id).shadowRoot.querySelector('#detune_val').innerHTML = parseInt(val);
 					break;
 					case "Q":
 						this.highpassFilterNode.Q.setValueAtTime(parseInt(val), null);
-						document.querySelector('highpass-plugin').shadowRoot.querySelector('#Q_val').innerHTML = parseInt(val);
+						document.querySelector('highpass-plugin#'+this.id).shadowRoot.querySelector('#Q_val').innerHTML = parseInt(val);
+					break;
+					case "gain":
+						this.highpassFilterNode.gain.setValueAtTime(parseFloat(val), null);
+						document.querySelector('highpass-plugin#'+this.id).shadowRoot.querySelector('#gain_val').innerHTML = parseFloat(val);
 					break;
 					default:
 						console.log("Le parametre specifie est inconnu.");
