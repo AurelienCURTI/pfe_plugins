@@ -1,130 +1,137 @@
-var highpassDoc = document.currentScript.ownerDocument; // Ici, la variable document correspond au document de index.html. Avec helloDoc, on s'assure de bien accéder le document de highpass.html
-var highpass_plugin = document.registerElement('highpass-plugin', {
-    prototype: Object.create(HTMLElement.prototype, {
-		plugin_name: {
-			value: "highpass-plugin",
-			writable: false,
-			enumerable: true,
-			configurable: true
-		},
-		audioCtx: {
-			value: null,
-			writable: true,
-			enumerable: true,
-			configurable: true
-		},
-		highpassFilterNode: {
-			value: null,
-			writable: true,
-			enumerable: true,
-			configurable: true
-		},
-		gainNode: {
-			value: null,
-			writable: true,
-			enumerable: true,
-			configurable: true
-		},
-		createdCallback: { // exécuté à chaque création d'un élément
-			value: function() {
-				var root = this.createShadowRoot();
-				var template = highpassDoc.querySelector('#hp_template'); // on cherche #template directement dans le DOM de hello-world.html
-				var clone = document.importNode(template.content, true);
-				var idComponent = this.id;
-				//Envoi d'evenement
-				var evt = highpassDoc.createEvent("CustomEvent");
-				evt.initCustomEvent("add_plugin", true, true, this);
-				this.dispatchEvent(evt);
-			  
-				root.appendChild(clone);
-				//Set listeners
-				root.querySelector('#hpass_freq').oninput = function(){
-					document.querySelector('highpass-plugin#'+idComponent).setParam('freq', root.querySelector('#hpass_freq').value);
-				};
-				root.querySelector('#hpass_detune').oninput = function(){
-					document.querySelector('highpass-plugin#'+idComponent).setParam('detune', root.querySelector('#hpass_detune').value);
-				};
-				root.querySelector('#hpass_q').oninput = function(){
-					document.querySelector('highpass-plugin#'+idComponent).setParam('Q', root.querySelector('#hpass_q').value);
-				};
-				root.querySelector('#hpass_gain').oninput = function(){
-					document.querySelector('highpass-plugin#'+idComponent).setParam('gain', root.querySelector('#hpass_gain').value);
-				};
-				root.querySelector('#activate').onclick = function(){
-					document.querySelector('highpass-plugin#'+idComponent).activate();
-				};
-				root.querySelector('#disable').onclick = function(){
-					document.querySelector('highpass-plugin#'+idComponent).bypass();
-				};
-			}	
-		},
-		connect: {
-			value: function(ctx, src, dest){
-				this.audioCtx = ctx;
-				this.highpassFilterNode = this.audioCtx.createBiquadFilter();
-				this.highpassFilterNode.type = "highpass";
-				this.gainNode = this.audioCtx.createGain();
-				src.connect(this.highpassFilterNode);
-				this.highpassFilterNode.connect(this.gainNode);
-				this.gainNode.connect(dest);
-			}
-		},
-		disconnect: {
-			value: function(src, dest){
-				this.highpassFilterNode.disconnect(src);
-				this.highpassFilterNode.disconnect(dest);
-				src.connect(dest);
-			}
-		},
-		getParams: {
-			value: function(){}
-		},
-		getRender: {
-			value: function(){}
-		},
-		getPluginName:	{
-			value: function(){
-				return this.plugin_name;
-			}
-		},
-		setParam: {
-			value: function(param, val) {
-				switch(param){
-					case "freq":
-						this.highpassFilterNode.frequency.setValueAtTime(parseInt(val), null);
-						document.querySelector('highpass-plugin#'+this.id).shadowRoot.querySelector('#freq_val').innerHTML = parseInt(val);
-					break;
-					case "detune":
-						this.highpassFilterNode.detune.setValueAtTime(parseInt(val), null);
-						document.querySelector('highpass-plugin#'+this.id).shadowRoot.querySelector('#detune_val').innerHTML = parseInt(val);
-					break;
-					case "Q":
-						this.highpassFilterNode.Q.setValueAtTime(parseInt(val), null);
-						document.querySelector('highpass-plugin#'+this.id).shadowRoot.querySelector('#Q_val').innerHTML = parseInt(val);
-					break;
-					case "gain":
-						this.highpassFilterNode.gain.setValueAtTime(parseFloat(val), null);
-						document.querySelector('highpass-plugin#'+this.id).shadowRoot.querySelector('#gain_val').innerHTML = parseFloat(val);
-					break;
-					default:
-						console.log("Le parametre specifie est inconnu.");
-					break;
-				};
-			}
-		},
-		activate: {
-			value: function(){
-				if(this.gainNode.gain != 1){
-					this.gainNode.gain.setValueAtTime(1, null);
-				}
-			}
-		},
-		bypass : {
-			value: function(){
-				if(this.gainNode.gain != 0){
-					this.gainNode.gain.setValueAtTime(0, null);
-				}
-			}
+(function() {
+    
+	// Creates an object based in the HTML Element prototype
+    var highpass_component = Object.create(HTMLElement.prototype);
+    console.log('Highpass plugin loaded');
+
+    //Retrieving the current document and not the host (index.html) document
+    var currentDoc = document.currentScript.ownerDocument;
+
+    // Fires when an instance of the element is created
+    highpass_component.createdCallback = function() 
+    {
+        var shadowRoot = this.createShadowRoot();
+		var template = currentDoc.querySelector('#highpass_template'); // on cherche #template directement dans le DOM du plugin
+		var clone = document.importNode(template.content, true);
+		
+		var idComponent = this.id;
+		shadowRoot.appendChild(clone);
+
+		this.registerButtonsCallbacks(shadowRoot);
+    };
+
+    // Fires when an instance was inserted into the document
+    highpass_component.attachedCallback = function(){ 
+		//Envoi d'evenement
+		var evt = currentDoc.createEvent("CustomEvent");
+		evt.initCustomEvent("add_plugin", true, true, this);
+		this.dispatchEvent(evt);
+    };
+
+    // Fires when an instance was removed from the document
+    highpass_component.detachedCallback = function(){
+		this.audioCtx.close();
+    };
+
+    highpass_component.attributeChangedCallback = function(attr, oldVal, newVal) {};   
+	
+	//Add Event listners on elements of the component
+    highpass_component.registerButtonsCallbacks = function(rootElement) { 
+        var slider_freq = rootElement.querySelector('#hpass_freq');
+        var slider_detune = rootElement.querySelector('#hpass_detune');
+        var slider_Q = rootElement.querySelector('#hpass_q');
+        var slider_gain = rootElement.querySelector('#hpass_gain');
+        var activate_btn = rootElement.querySelector('#activate');  
+        var disable_btn = rootElement.querySelector('#disable');  
+        var self = this;
+        
+        slider_freq.addEventListener('input', function(){
+            self.setParam('freq', slider_freq.value);
+        });
+		
+		slider_detune.addEventListener('input', function(){
+            self.setParam('detune', slider_detune.value);
+        });
+		
+		slider_Q.addEventListener('input', function(){
+            self.setParam('Q', slider_Q.value);
+        });
+		
+		slider_.addEventListener('input', function(){
+            self.setParam('gain', slider_gain.value);
+        });
+        
+        activate_btn.addEventListener('click', function(){
+            self.activate();
+        });
+		
+		disable_btn.addEventListener('click', function(){
+			self.bypass();
+        });
+    };
+	
+	highpass_component.connect = function(ctx, src, dest){
+		this.audioCtx = ctx;
+		this.highpassFilterNode = this.audioCtx.createBiquadFilter();
+		this.highpassFilterNode.type = "highpass";
+		this.gainNode = this.audioCtx.createGain();
+		src.connect(this.highpassFilterNode);
+		this.highpassFilterNode.connect(this.gainNode);
+		this.gainNode.connect(dest);
+	}
+	
+	highpass_component.disconnect = function(src, dest){
+		this.highpassFilterNode.disconnect(src);
+		this.highpassFilterNode.disconnect(dest);
+		src.connect(dest);
+	}
+	
+	highpass_component.getRender = function(){}
+		
+	highpass_component.getParams = function(){}
+		
+	highpass_component.getPluginName = function(){
+		return "highpass-plugin";
+	}
+
+	highpass_component.setParam = function(param, val) {
+		switch(param){
+			case "freq":
+				this.highpassFilterNode.frequency.setValueAtTime(parseInt(val), null);
+				this.shadowRoot.querySelector('#freq_val').innerHTML = parseInt(val);
+			break;
+			case "detune":
+				this.highpassFilterNode.detune.setValueAtTime(parseInt(val), null);
+				this.shadowRoot.querySelector('#detune_val').innerHTML = parseInt(val);
+			break;
+			case "Q":
+				this.highpassFilterNode.Q.setValueAtTime(parseInt(val), null);
+				this.shadowRoot.querySelector('#Q_val').innerHTML = parseInt(val);
+			break;
+			case "gain":
+				this.highpassFilterNode.gain.setValueAtTime(parseFloat(val), null);
+				this.shadowRoot.querySelector('#gain_val').innerHTML = parseFloat(val);
+			break;
+			default:
+				console.log("Le parametre specifie est inconnu.");
+			break;
+		};
+	}
+
+	highpass_component.activate = function(){
+		if(this.gainNode.gain != 1){
+			this.gainNode.gain.setValueAtTime(1, null);
 		}
-	})
-  });
+	}
+		
+	highpass_component.bypass = function(){
+		if(this.gainNode.gain != 0){
+			this.gainNode.gain.setValueAtTime(0, null);
+		}
+	}
+	
+    // Registers custom element
+    document.registerElement('highpass-plugin', {
+        prototype: highpass_component
+    });
+}());

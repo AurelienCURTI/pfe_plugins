@@ -1,204 +1,166 @@
-//variables globales 
-var flangerFilter;
+(function() {
+    
+	// Creates an object based in the HTML Element prototype
+    var flanger_component = Object.create(HTMLElement.prototype);
+    console.log('Flanger plugin loaded');
 
-// The flanger produces a swirling effect by delaying a "copy" of the sound by a small, 
-//gradually changing period
+    //Retrieving the current document and not the host (index.html) document
+    var currentDoc = document.currentScript.ownerDocument;
 
-var flangerDoc = document.currentScript.ownerDocument; 
-var flanger_plugin = document.registerElement('flanger-plugin', {
-    prototype: Object.create(HTMLElement.prototype, {
-
-    	plugin_name: {
-			value: "flanger-plugin",
-			writable: false,
-			enumerable: true,
-			configurable: true
-		},
-		audioCtx: {
-			value: null,
-			writable: true,
-			enumerable: true,
-			configurable: true
-		},
-		flangerInput: {
-			value: null,
-			writable: true,
-			enumerable: true,
-			configurable: true
-		},
-		flangerWetGainFilter: {
-			value: null,
-			writable: true,
-			enumerable: true,
-			configurable: true
-		},
-		flangerDelayFilter: {
-			value: null,
-			writable: true,
-			enumerable: true,
-			configurable: true
-		},
-		flangerGainFilter: {
-			value: null,
-			writable: true,
-			enumerable: true,
-			configurable: true
-		},
-		flangerFeedbackFilter: {
-			value: null,
-			writable: true,
-			enumerable: true,
-			configurable: true
-		},
-		flangerOscilFilter: {
-			value: null,
-			writable: true,
-			enumerable: true,
-			configurable: true
-		},
+    // Fires when an instance of the element is created
+    flanger_component.createdCallback = function() 
+    {
+        var shadowRoot = this.createShadowRoot();
+		var template = currentDoc.querySelector('#flanger_template'); // on cherche #template directement dans le DOM du plugin
+		var clone = document.importNode(template.content, true);
 		
-		createdCallback: { // exécuté à chaque création d'un élément <hello-world>
-			value: function() {
-				var root = this.createShadowRoot();
-				var template = flangerDoc.querySelector('#hp_template'); // on cherche #template directement dans le DOM de hello-world.html
-				var clone = document.importNode(template.content, true);
-				var container = this.getAttribute("container"); //Data binding de la variable container
-				var idComponent = this.id;
-				//Envoi d'evenement
-				var evt = flangerDoc.createEvent("CustomEvent");
-				evt.initCustomEvent("add_plugin", true, true, this);
-				this.dispatchEvent(evt);
-			  
-				root.appendChild(clone);
+		var idComponent = this.id;
+		shadowRoot.appendChild(clone);
 
-				root.querySelector('#flanger_time').oninput = function(){
-					document.querySelector('flanger-plugin#'+idComponent).setParam('time', root.querySelector('#flanger_time').value);
-				};
-				root.querySelector('#flanger_speed').oninput = function(){
-					document.querySelector('flanger-plugin#'+idComponent).setParam('speed', root.querySelector('#flanger_speed').value);
-				};
-				root.querySelector('#flanger_depth').oninput = function(){
-					document.querySelector('flanger-plugin#'+idComponent).setParam('depth', root.querySelector('#flanger_depth').value);
-				};
-				root.querySelector('#flanger_feedback').oninput = function(){
-					document.querySelector('flanger-plugin#'+idComponent).setParam('feedback', root.querySelector('#flanger_feedback').value);
-				};
-				root.querySelector('#activate').onclick = function(){
-					document.querySelector('flanger-plugin#'+idComponent).activate();
-				};
-				root.querySelector('#disable').onclick = function(){
-					document.querySelector('flanger-plugin#'+idComponent).bypass();
-				};
-			}	
-		},
-		connect: {
-			value: function(ctx, src, dest){
-				this.audioCtx = ctx; 
-				//input
-				this.flangerInput = this.audioCtx.createGain();
-				//noeud du wetGain
-				this.flangerWetGainFilter = this.audioCtx.createGain();
-				this.flangerWetGainFilter.type = "flanger";
-				//noeud du delay
-				this.flangerDelayFilter = this.audioCtx.createDelay();
-				this.flangerDelayFilter.type = "flanger";
-				//noeud du gain
-				this.flangerGainFilter = this.audioCtx.createGain();
-				this.flangerGainFilter.type = "flanger";
-				//noeud du feedback
-				this.flangerFeedbackFilter = this.audioCtx.createGain();
-				//noeud de l'oscillateur
-				this.flangerOscilFilter = this.audioCtx.createOscillator();
+		this.registerButtonsCallbacks(shadowRoot);
+    };
 
-				//on connecte tout
-				src.connect(this.flangerInput);
-				this.flangerOscilFilter.connect(this.flangerGainFilter);
-				this.flangerGainFilter.connect(this.flangerDelayFilter.delayTime);
-				this.flangerInput.connect(this.flangerWetGainFilter);
-				this.flangerInput.connect(this.flangerDelayFilter);
-				this.flangerDelayFilter.connect(this.flangerWetGainFilter);
-				this.flangerDelayFilter.connect(this.flangerFeedbackFilter);
-				this.flangerFeedbackFilter.connect(this.flangerInput);
-				this.flangerWetGainFilter.connect(dest);
-			}
-		},
-		disconnect: {
-			value: function(src, dest){
-				this.flangerInput.disconnect(src);
-				this.flangerInput.disconnect(this.flangerWetGainFilter);
-				this.flangerInput.disconnect(this.flangerDelayFilter);
+    // Fires when an instance was inserted into the document
+    flanger_component.attachedCallback = function(){ 
+		var evt = currentDoc.createEvent("CustomEvent");
+		evt.initCustomEvent("add_plugin", true, true, this);
+		this.dispatchEvent(evt);
+    };
 
-				this.flangerDelayFilter.disconnect(this.flangerWetGainFilter);
-				this.flangerDelayFilter.disconnect(this.flangerFeedbackFilter);
+    // Fires when an instance was removed from the document
+    flanger_component.detachedCallback = function(){
+		this.audioCtx.close();
+    };
 
-				this.flangerGainFilter.disconnect(this.flangerDelayFilter.delayTime);
+    flanger_component.attributeChangedCallback = function(attr, oldVal, newVal) {};   
+	
+	//Add Event listners on elements of the component
+    flanger_component.registerButtonsCallbacks = function(rootElement) { 
+        var slider_time = rootElement.querySelector('#flanger_time');
+        var slider_speed = rootElement.querySelector('#flanger_speed');
+        var slider_depth = rootElement.querySelector('#flanger_depth');
+        var slider_feedback = rootElement.querySelector('#flanger_feedback');
+        var activate_btn = rootElement.querySelector('#activate');  
+        var disable_btn = rootElement.querySelector('#disable');  
+        var self = this;
+        
+        slider_time.addEventListener('input', function(){
+            self.setParam('time', slider_time.value);
+        });
+		
+		slider_speed.addEventListener('input', function(){
+            self.setParam('speed', slider_speed.value);
+        });
+		
+		slider_depth.addEventListener('input', function(){
+            self.setParam('depth', slider_depth.value);
+        });
+		
+		slider_feedback.addEventListener('input', function(){
+            self.setParam('feedback', slider_feedback.value);
+        });
+        
+        activate_btn.addEventListener('click', function(){
+            self.activate();
+        });
+		
+		disable_btn.addEventListener('click', function(){
+			self.bypass();
+        });
+    };
+	
+	flanger_component.connect = function(ctx, src, dest){
+		this.audioCtx = ctx; 
+		//input
+		this.flangerInput = this.audioCtx.createGain();
+		//noeud du wetGain
+		this.flangerWetGainFilter = this.audioCtx.createGain();
+		this.flangerWetGainFilter.type = "flanger";
+		//noeud du delay
+		this.flangerDelayFilter = this.audioCtx.createDelay();
+		this.flangerDelayFilter.type = "flanger";
+		//noeud du gain
+		this.flangerGainFilter = this.audioCtx.createGain();
+		this.flangerGainFilter.type = "flanger";
+		//noeud du feedback
+		this.flangerFeedbackFilter = this.audioCtx.createGain();
+		//noeud de l'oscillateur
+		this.flangerOscilFilter = this.audioCtx.createOscillator();
 
-				this.flangerFeedbackFilter.disconnect(this.flangerInput);
+		//on connecte tout
+		src.connect(this.flangerInput);
+		this.flangerOscilFilter.connect(this.flangerGainFilter);
+		this.flangerGainFilter.connect(this.flangerDelayFilter.delayTime);
+		this.flangerInput.connect(this.flangerWetGainFilter);
+		this.flangerInput.connect(this.flangerDelayFilter);
+		this.flangerDelayFilter.connect(this.flangerWetGainFilter);
+		this.flangerDelayFilter.connect(this.flangerFeedbackFilter);
+		this.flangerFeedbackFilter.connect(this.flangerInput);
+		this.flangerWetGainFilter.connect(dest);
+	}
+	
+	flanger_component.disconnect = function(src, dest){
+		this.flangerInput.disconnect(src);
+		this.flangerInput.disconnect(this.flangerWetGainFilter);
+		this.flangerInput.disconnect(this.flangerDelayFilter);
+		this.flangerDelayFilter.disconnect(this.flangerWetGainFilter);
+		this.flangerDelayFilter.disconnect(this.flangerFeedbackFilter);
+		this.flangerGainFilter.disconnect(this.flangerDelayFilter.delayTime);
+		this.flangerFeedbackFilter.disconnect(this.flangerInput);
+		this.flangerOscilFilter.disconnect(this.flangerGainFilter);
+		this.flangerWetGainFilter.disconnect(dest);
+		src.connect(dest);
+	}
+	
+	flanger_component.getRender = function(){}
+		
+	flanger_component.getParams = function(){}
+		
+	flanger_component.getPluginName = function(){
+		return "flanger-plugin";
+	}
 
-				this.flangerOscilFilter.disconnect(this.flangerGainFilter);
+	flanger_component.setParam = function(param, val) {
+		switch(param){
+			case "time":
+				this.flangerDelayFilter.delayTime.setValueAtTime(parseFloat(val), null);
+				this.shadowRoot.querySelector('#time_val').innerHTML = parseFloat(val);
+			break;
+			case "speed":
+				this.flangerOscilFilter.frequency.setValueAtTime(parseFloat(val), null);
+				this.shadowRoot.querySelector('#speed_val').innerHTML = parseFloat(val);
+			break;
+			case "depth":
+				this.flangerGainFilter.gain.setValueAtTime(parseFloat(val), null);
+				this.shadowRoot.querySelector('#depth_val').innerHTML = parseFloat(val);
+			break;
+			case "feedback":
+				this.flangerFeedbackFilter.gain.setValueAtTime(parseFloat(val), null);
+				this.shadowRoot.querySelector('#feedback_val').innerHTML = parseFloat(val);
+			break;
+			default:
+				console.log("Le parametre specifie est inconnu.");
+			break;
+		};
+	}
 
-				this.flangerWetGainFilter.disconnect(dest);
-				
-
-				src.connect(dest);
-			}
-		},
-		getParams: {
-			value: function(){}
-		},
-		getRender: {
-			value: function(id_div_to_append){
-				var template_component = flangerDoc.querySelector("#content_component").innerHTML;
-				document.querySelector(id_div_to_append).innerHTML += template_component;
-			}
-		},
-		getPluginName:	{
-			value: function(){
-				return "flanger-plugin";
-			}
-		},
-		setParam: {
-			value: function(param, val) {
-				switch(param){
-					case "time":
-						this.flangerDelayFilter.delayTime.setValueAtTime(parseFloat(val), null);
-						document.querySelector('flanger-plugin#'+this.id).shadowRoot.querySelector('#time_val').innerHTML = parseFloat(val);
-					break;
-					case "speed":
-						this.flangerOscilFilter.frequency.setValueAtTime(parseFloat(val), null);
-						document.querySelector('flanger-plugin#'+this.id).shadowRoot.querySelector('#speed_val').innerHTML = parseFloat(val);
-					break;
-					case "depth":
-						this.flangerGainFilter.gain.setValueAtTime(parseFloat(val), null);
-						document.querySelector('flanger-plugin#'+this.id).shadowRoot.querySelector('#depth_val').innerHTML = parseFloat(val);
-					break;
-					case "feedback":
-						this.flangerFeedbackFilter.gain.setValueAtTime(parseFloat(val), null);
-						document.querySelector('flanger-plugin#'+this.id).shadowRoot.querySelector('#feedback_val').innerHTML = parseFloat(val);
-					break;
-					default:
-						console.log("Le parametre specifie est inconnu.");
-					break;
-				};
-			}
-		},
-		activate: {
-			value: function(){
-				if(this.flangerInput.gain != 1){
-					this.flangerInput.gain.setValueAtTime(1, null);
-				}
-			}
-		},
-		bypass : {
-			value: function(){
-				if(this.flangerInput.gain != 0){
-					this.flangerInput.gain.setValueAtTime(0, null);
-				}
-			}
+	flanger_component.activate = function(){
+		if(this.flangerInput.gain != 1){
+			this.flangerInput.gain.setValueAtTime(1, null);
 		}
-
-	})
-  });
+	}
+		
+	flanger_component.bypass = function(){
+		if(this.flangerInput.gain != 0){
+			this.flangerInput.gain.setValueAtTime(0, null);
+		}
+	}
+	
+    // Registers custom element
+    document.registerElement('flanger-plugin', {
+        prototype: flanger_component
+    });
+}());
 
 // // Changes the small delay time applied to the copied signal.
 // // fonctionne avec le delay

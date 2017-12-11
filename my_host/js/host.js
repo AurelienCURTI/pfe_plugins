@@ -1,8 +1,4 @@
-
-
 var ctxAudio = new (window.AudioContext || window.webkitAudioContext)();
-//Tableau contenant tous les plugins
-var plugins = new Array();
 
 var oscillateur = ctxAudio.createOscillator();
 
@@ -68,18 +64,21 @@ function addPlugin(plugin_name){
 	switch(plugin_name){
 		case 'delay':
 			var count = document.querySelectorAll('delay-plugin').length;
-			document.querySelector('#pedalboard').innerHTML += '<delay-plugin id="delay-plugin-'+count+'"></delay-plugin>';
-			// document.querySelector('delay-plugin#delay-plugin-'+count).connect(ctxAudio, source, ctxAudio.destination);
+			var delay = document.createElement("delay-plugin")
+			delay.setAttribute("id", 'delay-plugin-'+count);
+			document.querySelector('#pedalboard').appendChild(delay);
 		break;
 		case 'highpass':
 			var count = document.querySelectorAll('highpass-plugin').length;
-			document.querySelector('#pedalboard').innerHTML += '<highpass-plugin id="highpass-plugin-'+count+'"></highpass-plugin>';
-			// document.querySelector('highpass-plugin#highpass-plugin-'+count).connect(ctxAudio, source, ctxAudio.destination);
+			var highpass = document.createElement("highpass-plugin")
+			highpass.setAttribute("id", 'highpass-plugin-'+count);
+			document.querySelector('#pedalboard').appendChild(highpass);
 		break;
 		case 'flanger':
 			var count = document.querySelectorAll('flanger-plugin').length;
-			document.querySelector('#pedalboard').innerHTML += '<flanger-plugin id="flanger-plugin-'+count+'"></flanger-plugin>';
-			// document.querySelector('highpass-plugin#highpass-plugin-'+count).connect(ctxAudio, source, ctxAudio.destination);
+			var flanger = document.createElement("flanger-plugin")
+			flanger.setAttribute("id", 'flanger-plugin-'+count);
+			document.querySelector('#pedalboard').appendChild(flanger);
 		break;
 		
 		default:
@@ -94,11 +93,5 @@ function addPlugin(plugin_name){
 
 //Ecouteurs d'evenement
 document.addEventListener('add_plugin', function (event){
-	var plugin_name = event.target.getPluginName();
-	plugins.push(event.target);
-	console.log(plugins);
-	//console.log(document.querySelectorAll('#'+event.detail.id).length);
-	//if(document.querySelector(event.detail.id).length == 0){
-		event.target.connect(ctxAudio, source, ctxAudio.destination);
-	//}
+	event.target.connect(ctxAudio, source, ctxAudio.destination);
 }, true);
