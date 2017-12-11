@@ -92,7 +92,7 @@ var flanger_plugin = document.registerElement('flanger-plugin', {
 			}	
 		},
 		connect: {
-			value: function(ctx, nodeIn, nodeOut){
+			value: function(ctx, src, dest){
 				//input
 				flangerInput = ctx.createGain();
 				//noeud du wetGain
@@ -110,7 +110,7 @@ var flanger_plugin = document.registerElement('flanger-plugin', {
 				flangerOscilFilter = ctx.createOscillator();
 
 				//on connecte tout
-				nodeIn.connect(flangerInput);
+				src.connect(flangerInput);
 				flangerOscilFilter.connect(flangerGainFilter);
 				flangerGainFilter.connect(flangerDelayFilter.delayTime);
 				flangerInput.connect(flangerWetGainFilter);
@@ -118,30 +118,29 @@ var flanger_plugin = document.registerElement('flanger-plugin', {
 				flangerDelayFilter.connect(flangerWetGainFilter);
 				flangerDelayFilter.connect(flangerFeedbackFilter);
 				flangerFeedbackFilter.connect(flangerInput);
-				flangerWetGainFilter.connect(nodeOut);
+				flangerWetGainFilter.connect(dest);
 			}
 		},
 		disconnect: {
-			value: function(nodeIn, nodeOut){
-				flangerInput.disconnect(nodeIn);
-				flangerInput.disconnect(nodeOut);
+			value: function(src, dest){
+				flangerInput.disconnect(src);
+				flangerInput.disconnect(flangerWetGainFilter);
+				flangerInput.disconnect(flangerDelayFilter);
 
-				flangerDelayFilter.disconnect(nodeIn);
-				flangerDelayFilter.disconnect(nodeOut);
+				flangerDelayFilter.disconnect(flangerWetGainFilter);
+				flangerDelayFilter.disconnect(flangerFeedbackFilter);
 
-				flangerGainFilter.disconnect(nodeIn);
-				flangerGainFilter.disconnect(nodeOut);
+				flangerGainFilter.disconnect(flangerDelayFilter.delayTime);
 
-				flangerWetGainFilter.disconnect(nodeIn);
-				flangerWetGainFilter.disconnect(nodeOut);
 
-				flangerFeedbackFilter.disconnect(nodeIn);
-				flangerFeedbackFilter.disconnect(nodeOut);
+				flangerFeedbackFilter.disconnect(flangerInput);
 
-				flangerOscilFilter.disconnect(nodeIn);
-				flangerOscilFilter.disconnect(nodeOut);
+				flangerOscilFilter.disconnect(flangerGainFilter);
 
-				nodeIn.connect(nodeOut);
+				flangerWetGainFilter.disconnect(dest);
+				
+
+				src.connect(dest);
 			}
 		},
 		getParams: {
