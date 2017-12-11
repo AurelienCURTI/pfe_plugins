@@ -76,6 +76,11 @@ function addPlugin(plugin_name){
 			document.querySelector('#pedalboard').innerHTML += '<highpass-plugin id="highpass-plugin-'+count+'"></highpass-plugin>';
 			// document.querySelector('highpass-plugin#highpass-plugin-'+count).connect(ctxAudio, source, ctxAudio.destination);
 		break;
+		case 'flanger':
+			var count = document.querySelectorAll('flanger-plugin').length;
+			document.querySelector('#pedalboard').innerHTML += '<flanger-plugin id="flanger-plugin-'+count+'"></flanger-plugin>';
+			// document.querySelector('highpass-plugin#highpass-plugin-'+count).connect(ctxAudio, source, ctxAudio.destination);
+		break;
 		
 		default:
 			console.log('Plugin inconnu.');
