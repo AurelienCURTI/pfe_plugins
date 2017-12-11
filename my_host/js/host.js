@@ -15,7 +15,7 @@ function init() {
 audio_input = document.querySelector("audio");
 source = ctxAudio.createMediaElementSource(audio_input);
 
-  source.connect(gainNode);
+source.connect(gainNode);
 oscillateur.connect(gainNode);
 gainNode.connect(lowpassFilter);
 lowpassFilter.connect(ctxAudio.destination);
@@ -64,21 +64,31 @@ function addPlugin(plugin_name){
 	switch(plugin_name){
 		case 'delay':
 			var count = document.querySelectorAll('delay-plugin').length;
-			var delay = document.createElement("delay-plugin")
+			var delay = document.createElement("delay-plugin");
 			delay.setAttribute("id", 'delay-plugin-'+count);
 			document.querySelector('#pedalboard').appendChild(delay);
 		break;
 		case 'highpass':
 			var count = document.querySelectorAll('highpass-plugin').length;
-			var highpass = document.createElement("highpass-plugin")
+			var highpass = document.createElement("highpass-plugin");
 			highpass.setAttribute("id", 'highpass-plugin-'+count);
 			document.querySelector('#pedalboard').appendChild(highpass);
 		break;
 		case 'flanger':
 			var count = document.querySelectorAll('flanger-plugin').length;
-			var flanger = document.createElement("flanger-plugin")
+			var flanger = document.createElement("flanger-plugin");
 			flanger.setAttribute("id", 'flanger-plugin-'+count);
 			document.querySelector('#pedalboard').appendChild(flanger);
+		break;
+		case 'webdx7':
+			var count = document.querySelectorAll('wam-webdx7').length;
+			var webdx7 = document.createElement("wam-webdx7");
+			webdx7.setAttribute("id", 'wam-webdx7-'+count);
+			webdx7.init(ctxAudio, 256).then( function(controller)
+			{
+			  controller.connect(gainNode);
+			});
+			document.querySelector('#pedalboard').appendChild(webdx7);
 		break;
 		
 		default:
