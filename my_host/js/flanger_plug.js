@@ -93,51 +93,51 @@ var flanger_plugin = document.registerElement('flanger-plugin', {
 		},
 		connect: {
 			value: function(ctx, src, dest){
+				this.audioCtx = ctx; 
 				//input
-				flangerInput = ctx.createGain();
+				this.flangerInput = this.audioCtx.createGain();
 				//noeud du wetGain
-				flangerWetGainFilter = ctx.createGain();
-				flangerWetGainFilter.type = "flanger";
+				this.flangerWetGainFilter = this.audioCtx.createGain();
+				this.flangerWetGainFilter.type = "flanger";
 				//noeud du delay
-				flangerDelayFilter = ctx.createDelay();
-				flangerDelayFilter.type = "flanger";
+				this.flangerDelayFilter = this.audioCtx.createDelay();
+				this.flangerDelayFilter.type = "flanger";
 				//noeud du gain
-				flangerGainFilter = ctx.createGain();
-				flangerGainFilter.type = "flanger";
+				this.flangerGainFilter = this.audioCtx.createGain();
+				this.flangerGainFilter.type = "flanger";
 				//noeud du feedback
-				flangerFeedbackFilter = ctx.createGain();
+				this.flangerFeedbackFilter = this.audioCtx.createGain();
 				//noeud de l'oscillateur
-				flangerOscilFilter = ctx.createOscillator();
+				this.flangerOscilFilter = this.audioCtx.createOscillator();
 
 				//on connecte tout
-				src.connect(flangerInput);
-				flangerOscilFilter.connect(flangerGainFilter);
-				flangerGainFilter.connect(flangerDelayFilter.delayTime);
-				flangerInput.connect(flangerWetGainFilter);
-				flangerInput.connect(flangerDelayFilter);
-				flangerDelayFilter.connect(flangerWetGainFilter);
-				flangerDelayFilter.connect(flangerFeedbackFilter);
-				flangerFeedbackFilter.connect(flangerInput);
-				flangerWetGainFilter.connect(dest);
+				src.connect(this.flangerInput);
+				this.flangerOscilFilter.connect(this.flangerGainFilter);
+				this.flangerGainFilter.connect(this.flangerDelayFilter.delayTime);
+				this.flangerInput.connect(this.flangerWetGainFilter);
+				this.flangerInput.connect(this.flangerDelayFilter);
+				this.flangerDelayFilter.connect(this.flangerWetGainFilter);
+				this.flangerDelayFilter.connect(this.flangerFeedbackFilter);
+				this.flangerFeedbackFilter.connect(this.flangerInput);
+				this.flangerWetGainFilter.connect(dest);
 			}
 		},
 		disconnect: {
 			value: function(src, dest){
-				flangerInput.disconnect(src);
-				flangerInput.disconnect(flangerWetGainFilter);
-				flangerInput.disconnect(flangerDelayFilter);
+				this.flangerInput.disconnect(src);
+				this.flangerInput.disconnect(this.flangerWetGainFilter);
+				this.flangerInput.disconnect(this.flangerDelayFilter);
 
-				flangerDelayFilter.disconnect(flangerWetGainFilter);
-				flangerDelayFilter.disconnect(flangerFeedbackFilter);
+				this.flangerDelayFilter.disconnect(this.flangerWetGainFilter);
+				this.flangerDelayFilter.disconnect(this.flangerFeedbackFilter);
 
-				flangerGainFilter.disconnect(flangerDelayFilter.delayTime);
+				this.flangerGainFilter.disconnect(this.flangerDelayFilter.delayTime);
 
+				this.flangerFeedbackFilter.disconnect(this.flangerInput);
 
-				flangerFeedbackFilter.disconnect(flangerInput);
+				this.flangerOscilFilter.disconnect(this.flangerGainFilter);
 
-				flangerOscilFilter.disconnect(flangerGainFilter);
-
-				flangerWetGainFilter.disconnect(dest);
+				this.flangerWetGainFilter.disconnect(dest);
 				
 
 				src.connect(dest);
