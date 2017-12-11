@@ -57,7 +57,7 @@
             self.setParam('Q', slider_Q.value);
         });
 		
-		slider_.addEventListener('input', function(){
+		slider_gain.addEventListener('input', function(){
             self.setParam('gain', slider_gain.value);
         });
         

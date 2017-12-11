@@ -1,0 +1,40 @@
+.container{
+	background: #96DF69;
+	border-radius: 10px;
+	width: 350px;
+	border: 2px black solid;
+}
+
+.container_title{
+	display:table;
+	margin:auto;
+}
+
+.container_elements{
+	display:table;
+	margin:auto;
+}
+
+.container_elements > *{
+	display:table-cell;
+}
+
+.activate{
+	display: table-cell;
+    margin: auto;
+    width: 50%;
+    background: green;
+    height: 20%;
+    border-radius: 100%;
+    vertical-align: middle;
+}
+
+.disable{
+	display: table-cell;
+    margin: auto;
+    width: 50%;
+    background: red;
+    height: 20%;
+    border-radius: 100%;
+    vertical-align: middle;
+}

@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
+
    <!-- Imports polyfill -->
   <script src="../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
   
@@ -11,11 +12,20 @@
 </head>
 <body>
 	<template id="delay_template">
-		<h2>Delay</h2>
-		<label for="delay_slider">Delay Time</label>
-		<input id="delay_slider" type=range  min=0 max=1 step=0.01 value=0/><span id="delay_val">0</span><br/>
-		<button id="activate">ON</button>
-		<button id="disable">OFF</button>
+		<!-- CCS import -->
+		<style> @import "./css/delay_style.css"; </style>
+		<div class="container">
+			<div class="container_title">
+				<div id="component_state" class="activate"></div><h2>Delay</h2>
+			</div>
+			
+			<div class="container_elements">
+				<label for="delay_slider">Delay Time</label>
+				<input id="delay_slider" type=range  min=0 max=1 step=0.01 value=0/><span id="delay_val">0</span><br/>
+				<button id="activate">ON</button>
+				<button id="disable">OFF</button>
+			</div>
+		</div>
 	</template>
 </body>
 </html>

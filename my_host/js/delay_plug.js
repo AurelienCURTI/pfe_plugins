@@ -94,12 +94,14 @@
 	delay_component.activate = function(){
 		if(this.gainNode.gain != 1){
 			this.gainNode.gain.setValueAtTime(1, null);
+			this.shadowRoot.querySelector('#component_state').setAttribute("class", "activate"); 
 		}
 	}
 		
 	delay_component.bypass = function(){
 		if(this.gainNode.gain != 0){
 			this.gainNode.gain.setValueAtTime(0, null);
+			this.shadowRoot.querySelector('#component_state').setAttribute("class", "disable"); 
 		}
 	}
 	
