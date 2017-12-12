@@ -94,10 +94,10 @@
 	highpass_component.getRender = function(){}
 	
 	highpass_component.getDatas = function(){
-		var slider_freq = {'id':'freq', 'min_value': 1, 'max_value':1000};
-		var slider_detune = {'id':'detune', 'min_value': 1, 'max_value':100};
-		var slider_q = {'id':'Q', 'min_value': 1, 'max_value':100};
-		var slider_gain = {'id':'gain', 'min_value': 0, 'max_value':1};
+		var slider_freq = {'id':'freq', 'min_value':0, 'max_value':1000};
+		var slider_detune = {'id':'detune', 'min_value':0, 'max_value':100};
+		var slider_q = {'id':'Q', 'min_value':0, 'max_value':100};
+		var slider_gain = {'id':'gain', 'min_value':0, 'max_value':1};
 		var activate_btn = {'id':'activate'};
 		var disable_btn = {'id':'disable'};
 		return {'name': 'highpass-plugin', 'input':1, 'output': 1, 'slider1':slider_freq, 'slider2':slider_detune, 'slider3':slider_q, 'slider4':slider_gain, 'button1':activate_btn, 'button2':disable_btn};

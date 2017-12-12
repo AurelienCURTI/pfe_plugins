@@ -1,0 +1,45 @@
+.container{
+	background: #8A4B08;
+	border-radius: 10px;
+	width: 350px;
+	border: 2px black solid;
+	padding-bottom: 10px;
+}
+
+.container_title{
+	display:table;
+	margin:auto;
+}
+
+.container_elements{
+	display:table;
+	margin:auto;
+}
+
+.center{
+	text-align: center;
+}
+
+.enable{
+	position: relative;
+    width: 30px;
+    background: green;
+    height: 30px;
+    border-radius: 100%;
+    top: 50px;
+    left: 120px;
+}
+
+.disable{
+	position: relative;
+    width: 30px;
+    background: red;
+    height: 30px;
+    border-radius: 100%;
+    top: 50px;
+    left: 120px;
+}
+
+.slider{
+	display: block;
+}

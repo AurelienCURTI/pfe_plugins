@@ -81,10 +81,10 @@
 	delay_component.getParam = function(param){}
 		
 	delay_component.getDatas = function(){
-		var slider_delay = {'id':'delay', 'min_value': 0, 'max_value':1};
+		var slider_delay = {'id':'delay', 'min_value':0, 'max_value':1};
 		var activate_btn = {'id':'activate'};
 		var disable_btn = {'id':'disable'};
-		return {'name':'delay-plugin', 'input':1, 'output': 1, 'slider':slider_delay, 'button1':activate_btn, 'button2':disable_btn};
+		return {'name':'delay-plugin', 'input':1, 'output':1, 'slider':slider_delay, 'button1':activate_btn, 'button2':disable_btn};
 	}
 
 	delay_component.setParam = function(param, val) {

@@ -1,8 +1,6 @@
 var ctxAudio = new (window.AudioContext || window.webkitAudioContext)();
 
-var oscillateur = ctxAudio.createOscillator();
 var gainNode = ctxAudio.createGain();
-
 var audio_input, source;
 
 window.onload = init;
@@ -14,20 +12,7 @@ function init() {
 	source = ctxAudio.createMediaElementSource(audio_input);
 
 	source.connect(gainNode);
-	oscillateur.connect(gainNode);
 	gainNode.connect(ctxAudio.destination);
-}
-
-function set_oscillator_freq(){
-	oscillateur.frequency.value = document.querySelector("#oscillator_frequency").value;
-}
-
-function start_oscil(){
-	oscillateur.start();
-}
-
-function stop_oscil(){
-	oscillateur.stop();
 }
 
 function addPlugin(plugin_name){
@@ -67,6 +52,15 @@ function addPlugin(plugin_name){
 			flanger.connect(source, ctxAudio.destination);
 			console.log(flanger.getDatas());
 			document.querySelector('#pedalboard').appendChild(flanger);
+		break;
+		case 'oscillator':
+			var count = document.querySelectorAll('oscillator-plugin').length;
+			var oscillator = document.createElement("oscillator-plugin");
+			oscillator.setAttribute("id", 'oscillator-plugin-'+count);
+			oscillator.init(ctxAudio, 256);
+			oscillator.connect(source, ctxAudio.destination);
+			console.log(oscillator.getDatas());
+			document.querySelector('#pedalboard').appendChild(oscillator);
 		break;
 		case 'webdx7':
 			var count = document.querySelectorAll('wam-webdx7').length;

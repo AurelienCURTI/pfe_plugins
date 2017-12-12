@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+
+   <!-- Imports polyfill -->
+  <script src="../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+  
+  <script src="js/oscillator_plug.js"></script>
+
+</head>
+<body>
+	<template id="oscillator_template">
+		<!-- CCS import -->
+		<style> @import "./css/oscillator_style.css"; </style>
+
+		<div class="container">
+			<div class="container_title">
+				<div id="component_state" class="enable"></div><h2>Oscillator</h2>
+			</div>
+			
+			<div class="container_elements">
+				<div class="slider">
+					<label for="freq_slider">Frequence</label>
+					<input id="freq_slider" type=range  min=20 max=20000 value=0/><span id="freq_val">0</span>
+				</div>
+				<div class="slider">
+					<label for="detune_slider">Detune</label>
+					<input id="detune_slider" type=range  min=0 max=100 value=0/><span id="detune_val">0</span>
+				</div>
+				<div class="center">
+					<button id="activate">ON</button>
+					<button id="disable">OFF</button>
+				</div>
+			</div>
+		</div>
+	</template>
+</body>
+</html>
