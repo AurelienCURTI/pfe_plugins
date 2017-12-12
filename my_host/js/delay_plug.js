@@ -2,11 +2,11 @@
     
 	// Creates an object based in the HTML Element prototype
     var delay_component = Object.create(HTMLElement.prototype);
-    console.log('Delay plugin loaded');
+    //console.log('Delay plugin loaded');
 
     //Retrieving the current document and not the host (index.html) document
     var currentDoc = document.currentScript.ownerDocument;
-
+	
     // Fires when an instance of the element is created
     delay_component.createdCallback = function() 
     {
@@ -55,8 +55,13 @@
         });
     };
 	
-	delay_component.connect = function(ctx, src, dest){
+	delay_component.init = function(ctx, bufsize){
 		this.audioCtx = ctx;
+		this.bufferSize = bufsize;
+		console.log("delay initialized");
+	}
+	
+	delay_component.connect = function(src, dest){
 		this.delayFilterNode = this.audioCtx.createDelay();
 		this.delayFilterNode.type = "delay";
 		this.gainNode = this.audioCtx.createGain();
@@ -73,7 +78,12 @@
 	
 	delay_component.getRender = function(){}
 		
-	delay_component.getParams = function(){}
+	delay_component.getDatas = function(){
+		var slider_delay = {'id':'delay', 'min_value': 0, 'max_value':1};
+		var activate_btn = {'id':'activate'}
+		var disable_btn = {'id':'disable'}
+		return {'input':1, 'output': 1, 'slider':slider_delay, 'button1':activate_btn, 'button2':disable_btn};
+	}
 		
 	delay_component.getPluginName = function(){
 		return "delay-plugin";

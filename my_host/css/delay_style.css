@@ -21,20 +21,22 @@
 
 .activate{
 	display: table-cell;
-    margin: auto;
-    width: 50%;
+    width: 30px;
     background: green;
-    height: 20%;
+    height: 30px;
     border-radius: 100%;
-    vertical-align: middle;
+    position: absolute;
+    top: 20px;
+    left: 100px;
 }
 
 .disable{
 	display: table-cell;
-    margin: auto;
-    width: 50%;
+    width: 30px;
     background: red;
-    height: 20%;
+    height: 30px;
     border-radius: 100%;
-    vertical-align: middle;
+    position: absolute;
+    top: 20px;
+    left: 100px;
 }

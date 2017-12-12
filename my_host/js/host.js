@@ -66,6 +66,9 @@ function addPlugin(plugin_name){
 			var count = document.querySelectorAll('delay-plugin').length;
 			var delay = document.createElement("delay-plugin");
 			delay.setAttribute("id", 'delay-plugin-'+count);
+			delay.init(ctxAudio, 256);
+			delay.connect(source, ctxAudio.destination);
+			console.log(delay.getDatas());
 			document.querySelector('#pedalboard').appendChild(delay);
 		break;
 		case 'highpass':
@@ -103,5 +106,5 @@ function addPlugin(plugin_name){
 
 //Ecouteurs d'evenement
 document.addEventListener('add_plugin', function (event){
-	event.target.connect(ctxAudio, source, ctxAudio.destination);
+	
 }, true);
