@@ -84,6 +84,9 @@ function addPlugin(plugin_name){
 			var count = document.querySelectorAll('flanger-plugin').length;
 			var flanger = document.createElement("flanger-plugin");
 			flanger.setAttribute("id", 'flanger-plugin-'+count);
+			flanger.init(ctxAudio, 256);
+			flanger.connect(source, ctxAudio.destination);
+			console.log(flanger.getDatas());
 			document.querySelector('#pedalboard').appendChild(flanger);
 		break;
 		case 'webdx7':

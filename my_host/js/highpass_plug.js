@@ -100,14 +100,10 @@
 		var slider_gain = {'id':'gain', 'min_value': 0, 'max_value':1};
 		var activate_btn = {'id':'activate'};
 		var disable_btn = {'id':'disable'};
-		return {'input':1, 'output': 1, 'slider1':slider_freq, 'slider2':slider_detune, 'slider3':slider_q, 'slider4':slider_gain, 'button1':activate_btn, 'button2':disable_btn};
+		return {'name': 'highpass-plugin', 'input':1, 'output': 1, 'slider1':slider_freq, 'slider2':slider_detune, 'slider3':slider_q, 'slider4':slider_gain, 'button1':activate_btn, 'button2':disable_btn};
 	}
 		
 	highpass_component.getParam = function(param){}
-		
-	highpass_component.getPluginName = function(){
-		return "highpass-plugin";
-	}
 
 	highpass_component.setParam = function(param, val) {
 		switch(param){

@@ -69,8 +69,13 @@
         });
     };
 	
-	flanger_component.connect = function(ctx, src, dest){
-		this.audioCtx = ctx; 
+	flanger_component.init = function(ctx, bufsize){
+		this.audioCtx = ctx;
+		this.bufferSize = bufsize;
+		console.log("flanger initialized");
+	}
+	
+	flanger_component.connect = function(src, dest){
 		//input
 		this.flangerInput = this.audioCtx.createGain();
 		//noeud du wetGain
@@ -127,10 +132,16 @@
 	
 	flanger_component.getRender = function(){}
 		
-	flanger_component.getParams = function(){}
-		
-	flanger_component.getPluginName = function(){
-		return "flanger-plugin";
+	flanger_component.getParam = function(param){}
+	
+	flanger_component.getDatas = function(){
+		var slider_time = {'id':'time', 'min_value': 0, 'max_value':1};
+		var slider_speed = {'id':'speed', 'min_value': 0, 'max_value':1};
+		var slider_depth = {'id':'depth', 'min_value': 0, 'max_value':1};
+		var slider_feedback = {'id':'feedback', 'min_value': 0, 'max_value':1};
+		var activate_btn = {'id':'activate'};
+		var disable_btn = {'id':'disable'};
+		return {'name':'flanger-plugin', 'input':1, 'output': 1, 'slider1':slider_time, 'slider2':slider_speed, 'slider3':slider_depth, 'slider4':slider_feedback, 'button1':activate_btn, 'button2':disable_btn};
 	}
 
 	flanger_component.setParam = function(param, val) {
@@ -160,12 +171,14 @@
 	flanger_component.activate = function(){
 		if(this.flangerInput.gain != 1){
 			this.flangerInput.gain.setValueAtTime(1, null);
+			this.shadowRoot.querySelector('#component_state').setAttribute("class", "enable"); 
 		}
 	}
 		
 	flanger_component.bypass = function(){
 		if(this.flangerInput.gain != 0){
 			this.flangerInput.gain.setValueAtTime(0, null);
+			this.shadowRoot.querySelector('#component_state').setAttribute("class", "disable"); 
 		}
 	}
 	

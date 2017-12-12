@@ -11,17 +11,36 @@
 
 <body>
 	<template id="flanger_template">
-		<h2>Flanger</h2>
-		<label for="flanger_time">Time</label>
-		<input id="flanger_time" type=range min=0 max=1 step=0.01 value=0/><span id="time_val">0</span><br/>
-		<label for="flanger_speed">Speed</label>
-		<input id="flanger_speed" type=range min=0 max=1 step=0.01 value=0/><span id="speed_val">0</span><br/>
-		<label for="flanger_depth">Depth</label>
-		<input id="flanger_depth" type=range min=0 max=1 step=0.01 value=0/><span id="depth_val">0</span><br/>
-		<label for="flanger_feedback">Feedback</label>
-		<input id="flanger_feedback" type=range min=0 max=1 step=0.01 value=0/><span id="feedback_val">0</span><br/>
-		<button id="activate">ON</button>
-		<button id="disable">OFF</button>
+		<style> @import "./css/flanger_style.css"; </style>
+	
+		<div class="container">
+			<div class="container_title">
+				<div id="component_state" class="enable"></div><h2>Flanger</h2>
+			</div>
+			
+			<div class="container_elements">
+				<div class="slider">
+					<label for="flanger_time">Time</label>
+					<input id="flanger_time" type=range min=0 max=1 step=0.01 value=0/><span id="time_val">0</span>
+				</div>
+				<div class="slider">
+					<label for="flanger_speed">Speed</label>
+					<input id="flanger_speed" type=range min=0 max=1 step=0.01 value=0/><span id="speed_val">0</span>
+				</div>
+				<div class="slider">
+					<label for="flanger_depth">Depth</label>
+					<input id="flanger_depth" type=range min=0 max=1 step=0.01 value=0/><span id="depth_val">0</span>
+				</div>
+				<div class="slider">
+					<label for="flanger_feedback">Feedback</label>
+					<input id="flanger_feedback" type=range min=0 max=1 step=0.01 value=0/><span id="feedback_val">0</span>
+				</div>
+				<div class="center">
+					<button id="activate">ON</button>
+					<button id="disable">OFF</button>
+				</div>
+			</div>
+		</div>
 	</template>
 </body>
 </html>
