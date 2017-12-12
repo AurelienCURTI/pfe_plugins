@@ -97,6 +97,19 @@
 		this.flangerDelayFilter.connect(this.flangerFeedbackFilter);
 		this.flangerFeedbackFilter.connect(this.flangerInput);
 		this.flangerWetGainFilter.connect(dest);
+
+		//on initialise les valeurs
+		this.flangerDelayFilter.delayTime.setValueAtTime(0.005, null);
+		this.shadowRoot.querySelector('#time_val').innerHTML = 0.005;
+
+		this.flangerGainFilter.gain.setValueAtTime(0.002, null);
+		this.shadowRoot.querySelector('#depth_val').innerHTML = 0.002;
+
+		this.flangerFeedbackFilter.gain.setValueAtTime(0.5, null);
+		this.shadowRoot.querySelector('#feedback_val').innerHTML = 0.5;
+
+		this.flangerOscilFilter.frequency.setValueAtTime(0.25, null);
+		this.shadowRoot.querySelector('#speed_val').innerHTML = 0.25;
 	}
 	
 	flanger_component.disconnect = function(src, dest){
