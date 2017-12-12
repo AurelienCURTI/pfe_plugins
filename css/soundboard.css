@@ -89,6 +89,7 @@ audio::-webkit-media-controls-time-remaining-display {
   user-select: none;
   transform:scale(1,1);
   overflow: auto;
+  display:inline-flex;
 }
 
 .pedals:hover {
