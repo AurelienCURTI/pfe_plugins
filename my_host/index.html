@@ -24,6 +24,7 @@
 
    <!-- Imports custom element -->
   <link rel="import" href="./highpass.html">
+  <link rel="import" href="./lowpass.html">
   <link rel="import" href="./delay.html">
   <link rel="import" href="./flanger.html">
   <link rel="import" href="./webdx7/dist/wam-webdx7.all.html">
@@ -51,12 +52,12 @@
   
   <div class="div_app_tabs">
     <div class="div_tabs" id="div_tabs">
-		<input id="tab-1" type="radio" name="input-tab" checked><label for="tab-1">Sound Menu</label>
+		<input id="tab-1" type="radio" name="input-tab" checked/><label for="tab-1">Sound Menu</label>
 		<button onclick="start_oscil()">Oscillator</button>
 		<button onclick="stop_oscil()">Stop</button>
-		<input id="oscillator_frequency" type="text" onchange="set_oscillator_freq()" placeholder="Frequence"><br>
-		<input type=range min=50 max=1000 value=300 oninput="changeLPfreq(this.value);">
+		<input id="oscillator_frequency" type="text" onchange="set_oscillator_freq()" placeholder="Frequence"/>
 		<button onclick="addPlugin('delay')">Delay</button>
+		<button onclick="addPlugin('lowpass')">Lowpass</button>
 		<button onclick="addPlugin('highpass')">Highpass</button>
 		<button onclick="addPlugin('flanger')">Flanger</button>
 		<button onclick="addPlugin('webdx7')">Webdx7</button>

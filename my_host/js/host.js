@@ -1,46 +1,22 @@
 var ctxAudio = new (window.AudioContext || window.webkitAudioContext)();
 
 var oscillateur = ctxAudio.createOscillator();
-
 var gainNode = ctxAudio.createGain();
-var lowpassFilter = ctxAudio.createBiquadFilter();
-var HEIGHT, CurY;
+
 var audio_input, source;
 
 window.onload = init;
 
 function init() {
-//Source audio oscillateur
-//Source audio musique
-audio_input = document.querySelector("audio");
-source = ctxAudio.createMediaElementSource(audio_input);
+	//Source audio oscillateur
+	//Source audio musique
+	audio_input = document.querySelector("audio");
+	source = ctxAudio.createMediaElementSource(audio_input);
 
-source.connect(gainNode);
-oscillateur.connect(gainNode);
-gainNode.connect(lowpassFilter);
-lowpassFilter.connect(ctxAudio.destination);
-
-
-// Create variables to store mouse pointer Y coordinate
-// and HEIGHT of screen
-CurY;
-  HEIGHT = window.innerHeight;
-// Get new mouse pointer coordinates when mouse is moved
-// then set new gain value
-//document.onmousemove = updatePage;
-  
+	source.connect(gainNode);
+	oscillateur.connect(gainNode);
+	gainNode.connect(ctxAudio.destination);
 }
-
-function updatePage(e) {
-	CurY = (window.Event) ? e.pageY : event.clientY + (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
-	lowpassFilter.detune.value = CurY/HEIGHT;
-	source.volume = CurY/HEIGHT;
-}
-// connect the AudioBufferSourceNode to the gainNode
-// and the gainNode to the destination, so we can play the
-// music and adjust the volume using the mouse cursor
-
-
 
 function set_oscillator_freq(){
 	oscillateur.frequency.value = document.querySelector("#oscillator_frequency").value;
@@ -52,12 +28,6 @@ function start_oscil(){
 
 function stop_oscil(){
 	oscillateur.stop();
-}
-
-function changeLPfreq(val) {
-  val = parseInt(val);
-  
-  lowpassFilter.frequency.value = val;
 }
 
 function addPlugin(plugin_name){
@@ -79,6 +49,15 @@ function addPlugin(plugin_name){
 			highpass.connect(source, ctxAudio.destination);
 			console.log(highpass.getDatas());
 			document.querySelector('#pedalboard').appendChild(highpass);
+		break;
+		case 'lowpass':
+			var count = document.querySelectorAll('lowpass-plugin').length;
+			var lowpass = document.createElement("lowpass-plugin");
+			lowpass.setAttribute("id", 'lowpass-plugin-'+count);
+			lowpass.init(ctxAudio, 256);
+			lowpass.connect(source, ctxAudio.destination);
+			console.log(lowpass.getDatas());
+			document.querySelector('#pedalboard').appendChild(lowpass);
 		break;
 		case 'flanger':
 			var count = document.querySelectorAll('flanger-plugin').length;

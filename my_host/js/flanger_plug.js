@@ -2,7 +2,7 @@
     
 	// Creates an object based in the HTML Element prototype
     var flanger_component = Object.create(HTMLElement.prototype);
-    console.log('Flanger plugin loaded');
+    //console.log('Flanger plugin loaded');
 
     //Retrieving the current document and not the host (index.html) document
     var currentDoc = document.currentScript.ownerDocument;
