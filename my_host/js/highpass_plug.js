@@ -70,8 +70,13 @@
         });
     };
 	
-	highpass_component.connect = function(ctx, src, dest){
+	highpass_component.init = function(ctx, bufsize){
 		this.audioCtx = ctx;
+		this.bufferSize = bufsize;
+		console.log("highpass initialized");
+	}
+	
+	highpass_component.connect = function(src, dest){
 		this.highpassFilterNode = this.audioCtx.createBiquadFilter();
 		this.highpassFilterNode.type = "highpass";
 		this.gainNode = this.audioCtx.createGain();
@@ -87,8 +92,18 @@
 	}
 	
 	highpass_component.getRender = function(){}
+	
+	highpass_component.getDatas = function(){
+		var slider_freq = {'id':'freq', 'min_value': 1, 'max_value':1000};
+		var slider_detune = {'id':'detune', 'min_value': 1, 'max_value':100};
+		var slider_q = {'id':'Q', 'min_value': 1, 'max_value':100};
+		var slider_gain = {'id':'gain', 'min_value': 0, 'max_value':1};
+		var activate_btn = {'id':'activate'};
+		var disable_btn = {'id':'disable'};
+		return {'input':1, 'output': 1, 'slider1':slider_freq, 'slider2':slider_detune, 'slider3':slider_q, 'slider4':slider_gain, 'button1':activate_btn, 'button2':disable_btn};
+	}
 		
-	highpass_component.getParams = function(){}
+	highpass_component.getParam = function(param){}
 		
 	highpass_component.getPluginName = function(){
 		return "highpass-plugin";
@@ -121,12 +136,14 @@
 	highpass_component.activate = function(){
 		if(this.gainNode.gain != 1){
 			this.gainNode.gain.setValueAtTime(1, null);
+			this.shadowRoot.querySelector('#component_state').setAttribute("class", "enable"); 
 		}
 	}
 		
 	highpass_component.bypass = function(){
 		if(this.gainNode.gain != 0){
 			this.gainNode.gain.setValueAtTime(0, null);
+			this.shadowRoot.querySelector('#component_state').setAttribute("class", "disable"); 
 		}
 	}
 	

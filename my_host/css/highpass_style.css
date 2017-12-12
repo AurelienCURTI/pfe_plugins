@@ -1,8 +1,9 @@
 .container{
-	background: #96DF69;
+	background: #2E9AFE;
 	border-radius: 10px;
 	width: 350px;
 	border: 2px black solid;
+	padding-bottom: 10px;
 }
 
 .container_title{
@@ -15,28 +16,29 @@
 	margin:auto;
 }
 
-.container_elements > *{
-	display:table-cell;
+.center{
+	text-align: center;
 }
 
 .enable{
-	display: table-cell;
+	position: relative;
     width: 30px;
     background: green;
     height: 30px;
     border-radius: 100%;
-    position: absolute;
-    top: 20px;
-    left: 100px;
+    top: 50px;
+    left: 110px;
 }
 
 .disable{
-	display: table-cell;
     width: 30px;
     background: red;
     height: 30px;
     border-radius: 100%;
-    position: absolute;
-    top: 20px;
-    left: 100px;
+    top: 50px;
+    left: 110px;
+}
+
+.slider{
+	display: block;
 }

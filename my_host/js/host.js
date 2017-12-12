@@ -75,6 +75,9 @@ function addPlugin(plugin_name){
 			var count = document.querySelectorAll('highpass-plugin').length;
 			var highpass = document.createElement("highpass-plugin");
 			highpass.setAttribute("id", 'highpass-plugin-'+count);
+			highpass.init(ctxAudio, 256);
+			highpass.connect(source, ctxAudio.destination);
+			console.log(highpass.getDatas());
 			document.querySelector('#pedalboard').appendChild(highpass);
 		break;
 		case 'flanger':
