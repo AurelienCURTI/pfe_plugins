@@ -58,16 +58,25 @@
 	delay_component.init = function(ctx, bufsize){
 		this.audioCtx = ctx;
 		this.bufferSize = bufsize;
-		console.log("delay initialized");
-	}
-	
-	delay_component.connect = function(src, dest){
+		
 		this.delayFilterNode = this.audioCtx.createDelay();
 		this.delayFilterNode.type = "delay";
 		this.gainNode = this.audioCtx.createGain();
-		src.connect(this.delayFilterNode);
 		this.delayFilterNode.connect(this.gainNode);
+		
+		console.log("delay initialized");
+	}
+	
+	delay_component.connect = function(dest){
 		this.gainNode.connect(dest);
+	}
+	
+	delay_component.getInput = function(){
+		return this.delayFilterNode;
+	}
+	
+	delay_component.getOutput = function(){
+		return this.gainNode;
 	}
 	
 	delay_component.disconnect = function(src, dest){

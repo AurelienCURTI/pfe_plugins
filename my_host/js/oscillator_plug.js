@@ -63,15 +63,21 @@
 	oscillator_component.init = function(ctx, bufsize){
 		this.audioCtx = ctx;
 		this.bufferSize = bufsize;
-		console.log("oscillator initialized");
-	}
-	
-	oscillator_component.connect = function(src, dest){
+		
 		this.oscillatorNode = ctxAudio.createOscillator();
 		this.gainNode = this.audioCtx.createGain();
 		this.oscillatorNode.connect(this.gainNode);
 		this.oscillatorNode.start();
+		
+		console.log("oscillator initialized");
+	}
+	
+	oscillator_component.connect = function(dest){
 		this.gainNode.connect(dest);
+	}
+	
+	oscillator_component.getOutput = function(){
+		return this.gainNode;
 	}
 	
 	oscillator_component.disconnect = function(src, dest){

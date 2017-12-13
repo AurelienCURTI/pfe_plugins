@@ -73,16 +73,24 @@
 	highpass_component.init = function(ctx, bufsize){
 		this.audioCtx = ctx;
 		this.bufferSize = bufsize;
-		console.log("highpass initialized");
-	}
-	
-	highpass_component.connect = function(src, dest){
+		
 		this.highpassFilterNode = this.audioCtx.createBiquadFilter();
 		this.highpassFilterNode.type = "highpass";
 		this.gainNode = this.audioCtx.createGain();
-		src.connect(this.highpassFilterNode);
 		this.highpassFilterNode.connect(this.gainNode);
+		console.log("highpass initialized");
+	}
+	
+	highpass_component.connect = function(dest){
 		this.gainNode.connect(dest);
+	}
+	
+	highpass_component.getInput = function(){
+		return this.highpassFilterNode;
+	}
+	
+	highpass_component.getOutput = function(){
+		return this.gainNode;
 	}
 	
 	highpass_component.disconnect = function(src, dest){

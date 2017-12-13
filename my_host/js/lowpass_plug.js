@@ -73,16 +73,25 @@
 	lowpass_component.init = function(ctx, bufsize){
 		this.audioCtx = ctx;
 		this.bufferSize = bufsize;
-		console.log("lowpass initialized");
-	}
-	
-	lowpass_component.connect = function(src, dest){
+		
 		this.lowpassFilterNode = this.audioCtx.createBiquadFilter();
 		this.lowpassFilterNode.type = "lowpass";
 		this.gainNode = this.audioCtx.createGain();
-		src.connect(this.lowpassFilterNode);
 		this.lowpassFilterNode.connect(this.gainNode);
+		
+		console.log("lowpass initialized");
+	}
+	
+	lowpass_component.connect = function(dest){
 		this.gainNode.connect(dest);
+	}
+	
+	lowpass_component.getInput = function(){
+		return this.lowpassFilterNode;
+	}
+	
+	lowpass_component.getOutput = function(){
+		return this.gainNode;
 	}
 	
 	lowpass_component.disconnect = function(src, dest){
