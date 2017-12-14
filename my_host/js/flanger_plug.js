@@ -2,7 +2,6 @@
     
 	// Creates an object based in the HTML Element prototype
     var flanger_component = Object.create(HTMLElement.prototype);
-    //console.log('Flanger plugin loaded');
 
     //Retrieving the current document and not the host (index.html) document
     var currentDoc = document.currentScript.ownerDocument;
@@ -21,11 +20,7 @@
     };
 
     // Fires when an instance was inserted into the document
-    flanger_component.attachedCallback = function(){ 
-		var evt = currentDoc.createEvent("CustomEvent");
-		evt.initCustomEvent("add_plugin", true, true, this);
-		this.dispatchEvent(evt);
-    };
+    flanger_component.attachedCallback = function(){};
 
     // Fires when an instance was removed from the document
     flanger_component.detachedCallback = function(){
@@ -72,10 +67,7 @@
 	flanger_component.init = function(ctx, bufsize){
 		this.audioCtx = ctx;
 		this.bufferSize = bufsize;
-		console.log("flanger initialized");
-	}
-	
-	flanger_component.connect = function(src, dest){
+		
 		//input
 		this.flangerInput = this.audioCtx.createGain();
 		//noeud du wetGain
@@ -91,19 +83,25 @@
 		this.flangerFeedbackFilter = this.audioCtx.createGain();
 		//noeud de l'oscillateur
 		this.flangerOscilFilter = this.audioCtx.createOscillator();
-
-		//on connecte tout
-		src.connect(this.flangerInput);
+		
+		//Noeud gain in et bypass
+		this.gainNodeIn = this.audioCtx.createGain();
+		this.gainNodeBypass = this.audioCtx.createGain();
+		
+		//Connect nodes
 		this.flangerOscilFilter.connect(this.flangerGainFilter);
 		this.flangerGainFilter.connect(this.flangerDelayFilter.delayTime);
+		this.gainNodeIn.connect(this.flangerInput);
+		this.gainNodeIn.connect(this.gainNodeBypass);
+		this.gainNodeBypass.connect(this.flangerWetGainFilter);
 		this.flangerInput.connect(this.flangerWetGainFilter);
 		this.flangerInput.connect(this.flangerDelayFilter);
 		this.flangerDelayFilter.connect(this.flangerWetGainFilter);
 		this.flangerDelayFilter.connect(this.flangerFeedbackFilter);
 		this.flangerFeedbackFilter.connect(this.flangerInput);
-		this.flangerWetGainFilter.connect(dest);
-
-		//on initialise les valeurs
+		
+		//Set nodes properties
+		this.gainNodeBypass.gain.setValueAtTime(0, null);
 		this.flangerDelayFilter.delayTime.setValueAtTime(0.005, null);
 		this.shadowRoot.querySelector('#time_val').innerHTML = 0.005;
 
@@ -115,6 +113,20 @@
 
 		this.flangerOscilFilter.frequency.setValueAtTime(0.25, null);
 		this.shadowRoot.querySelector('#speed_val').innerHTML = 0.25;
+		
+		console.log("flanger initialized");
+	}
+	
+	flanger_component.connect = function(dest){
+		this.flangerWetGainFilter.connect(dest);
+	}
+	
+	flanger_component.getInput = function(){
+		return this.gainNodeIn;
+	}
+	
+	flanger_component.getOutput = function(){
+		return this.flangerWetGainFilter;
 	}
 	
 	flanger_component.disconnect = function(src, dest){
@@ -141,7 +153,7 @@
 		var slider_feedback = {'id':'feedback', 'min_value': 0, 'max_value':1};
 		var activate_btn = {'id':'activate'};
 		var disable_btn = {'id':'disable'};
-		return {'name':'flanger-plugin', 'input':1, 'output': 1, 'slider1':slider_time, 'slider2':slider_speed, 'slider3':slider_depth, 'slider4':slider_feedback, 'button1':activate_btn, 'button2':disable_btn};
+		return {'name':'flanger-plugin', 'version':0.1, 'input':1, 'output': 1, 'slider1':slider_time, 'slider2':slider_speed, 'slider3':slider_depth, 'slider4':slider_feedback, 'button1':activate_btn, 'button2':disable_btn};
 	}
 
 	flanger_component.setParam = function(param, val) {
@@ -171,6 +183,7 @@
 	flanger_component.activate = function(){
 		if(this.flangerInput.gain != 1){
 			this.flangerInput.gain.setValueAtTime(1, null);
+			this.gainNodeBypass.gain.setValueAtTime(0, null);
 			this.shadowRoot.querySelector('#component_state').setAttribute("class", "enable"); 
 		}
 	}
@@ -178,6 +191,7 @@
 	flanger_component.bypass = function(){
 		if(this.flangerInput.gain != 0){
 			this.flangerInput.gain.setValueAtTime(0, null);
+			this.gainNodeBypass.gain.setValueAtTime(1, null);
 			this.shadowRoot.querySelector('#component_state').setAttribute("class", "disable"); 
 		}
 	}

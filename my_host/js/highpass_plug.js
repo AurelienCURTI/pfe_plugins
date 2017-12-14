@@ -2,7 +2,6 @@
     
 	// Creates an object based in the HTML Element prototype
     var highpass_component = Object.create(HTMLElement.prototype);
-    //console.log('Highpass plugin loaded');
 
     //Retrieving the current document and not the host (index.html) document
     var currentDoc = document.currentScript.ownerDocument;
@@ -21,12 +20,7 @@
     };
 
     // Fires when an instance was inserted into the document
-    highpass_component.attachedCallback = function(){ 
-		//Envoi d'evenement
-		var evt = currentDoc.createEvent("CustomEvent");
-		evt.initCustomEvent("add_plugin", true, true, this);
-		this.dispatchEvent(evt);
-    };
+    highpass_component.attachedCallback = function(){};
 
     // Fires when an instance was removed from the document
     highpass_component.detachedCallback = function(){
@@ -74,29 +68,42 @@
 		this.audioCtx = ctx;
 		this.bufferSize = bufsize;
 		
+		//create nodes
+		this.gainNodeIn = this.audioCtx.createGain();
+		this.gainNodeOut = this.audioCtx.createGain();
 		this.highpassFilterNode = this.audioCtx.createBiquadFilter();
 		this.highpassFilterNode.type = "highpass";
 		this.gainNode = this.audioCtx.createGain();
+		this.gainNodeBypass = this.audioCtx.createGain();
+		
+		//connect nodes
+		this.gainNodeIn.connect(this.highpassFilterNode);
+		this.gainNodeIn.connect(this.gainNodeBypass);
 		this.highpassFilterNode.connect(this.gainNode);
+		this.gainNode.connect(this.gainNodeOut);
+		this.gainNodeBypass.connect(this.gainNodeOut);
+		
+		//Set nodes properties
+		this.gainNodeBypass.gain.setValueAtTime(0, null);
+		
 		console.log("highpass initialized");
 	}
 	
 	highpass_component.connect = function(dest){
-		this.gainNode.connect(dest);
+		this.gainNodeOut.connect(dest);
 	}
 	
 	highpass_component.getInput = function(){
-		return this.highpassFilterNode;
+		return this.gainNodeIn;
 	}
 	
 	highpass_component.getOutput = function(){
-		return this.gainNode;
+		return this.gainNodeOut;
 	}
 	
-	highpass_component.disconnect = function(src, dest){
-		this.highpassFilterNode.disconnect(src);
-		this.highpassFilterNode.disconnect(dest);
-		src.connect(dest);
+	highpass_component.disconnect = function(){
+		this.gainNodeIn.disconnect();
+		this.gainNodeOut.disconnect();
 	}
 	
 	highpass_component.getRender = function(){}
@@ -108,7 +115,7 @@
 		var slider_gain = {'id':'gain', 'min_value':0, 'max_value':1};
 		var activate_btn = {'id':'activate'};
 		var disable_btn = {'id':'disable'};
-		return {'name': 'highpass-plugin', 'input':1, 'output': 1, 'slider1':slider_freq, 'slider2':slider_detune, 'slider3':slider_q, 'slider4':slider_gain, 'button1':activate_btn, 'button2':disable_btn};
+		return {'name': 'highpass-plugin', 'version':0.1, 'input':1, 'output': 1, 'slider1':slider_freq, 'slider2':slider_detune, 'slider3':slider_q, 'slider4':slider_gain, 'button1':activate_btn, 'button2':disable_btn};
 	}
 		
 	highpass_component.getParam = function(param){}
@@ -140,6 +147,7 @@
 	highpass_component.activate = function(){
 		if(this.gainNode.gain != 1){
 			this.gainNode.gain.setValueAtTime(1, null);
+			this.gainNodeBypass.gain.setValueAtTime(0, null);
 			this.shadowRoot.querySelector('#component_state').setAttribute("class", "enable"); 
 		}
 	}
@@ -147,6 +155,7 @@
 	highpass_component.bypass = function(){
 		if(this.gainNode.gain != 0){
 			this.gainNode.gain.setValueAtTime(0, null);
+			this.gainNodeBypass.gain.setValueAtTime(1, null);
 			this.shadowRoot.querySelector('#component_state').setAttribute("class", "disable"); 
 		}
 	}

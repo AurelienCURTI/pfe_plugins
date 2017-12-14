@@ -19,7 +19,6 @@ function addPlugin(plugin_name){
 			delay.setAttribute("id", 'delay-plugin-'+count);
 			delay.init(ctxAudio, 256);
 			interconnect_plugins(lastPlugin, delay);
-			//delay.connect(source, ctxAudio.destination);
 			console.log(delay.getDatas());
 			document.querySelector('#pedalboard').appendChild(delay);
 		break;
@@ -29,7 +28,6 @@ function addPlugin(plugin_name){
 			highpass.setAttribute("id", 'highpass-plugin-'+count);
 			highpass.init(ctxAudio, 256);
 			interconnect_plugins(lastPlugin, highpass);
-			//highpass.connect(source, ctxAudio.destination);
 			console.log(highpass.getDatas());
 			document.querySelector('#pedalboard').appendChild(highpass);
 		break;
@@ -39,7 +37,6 @@ function addPlugin(plugin_name){
 			lowpass.setAttribute("id", 'lowpass-plugin-'+count);
 			lowpass.init(ctxAudio, 256);
 			interconnect_plugins(lastPlugin, lowpass);
-			//lowpass.connect(source, ctxAudio.destination);
 			console.log(lowpass.getDatas());
 			document.querySelector('#pedalboard').appendChild(lowpass);
 		break;
@@ -48,7 +45,7 @@ function addPlugin(plugin_name){
 			var flanger = document.createElement("flanger-plugin");
 			flanger.setAttribute("id", 'flanger-plugin-'+count);
 			flanger.init(ctxAudio, 256);
-			flanger.connect(source, ctxAudio.destination);
+			interconnect_plugins(lastPlugin, flanger);
 			console.log(flanger.getDatas());
 			document.querySelector('#pedalboard').appendChild(flanger);
 		break;
@@ -81,7 +78,7 @@ function addPlugin(plugin_name){
 
 function interconnect_plugins(plug1, plug2){
 	if(plug1 !== undefined && plug1 != null){
-		//plug1.getOutput().disconnect();
+		plug1.getOutput().disconnect();
 		plug1.getOutput().connect(plug2.getInput());
 		plug2.connect(ctxAudio.destination);
 	}
@@ -91,11 +88,3 @@ function interconnect_plugins(plug1, plug2){
 		plug2.connect(ctxAudio.destination);
 	}
 }
-
-/********************************************************************/
-/********************************************************************/
-
-//Ecouteurs d'evenement
-document.addEventListener('add_plugin', function (event){
-	
-}, true);

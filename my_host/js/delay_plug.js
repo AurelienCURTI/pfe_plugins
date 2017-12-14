@@ -2,7 +2,6 @@
     
 	// Creates an object based in the HTML Element prototype
     var delay_component = Object.create(HTMLElement.prototype);
-    //console.log('Delay plugin loaded');
 
     //Retrieving the current document and not the host (index.html) document
     var currentDoc = document.currentScript.ownerDocument;
@@ -21,12 +20,7 @@
     };
 
     // Fires when an instance was inserted into the document
-    delay_component.attachedCallback = function(){ 
-		//Envoi d'evenement
-		var evt = currentDoc.createEvent("CustomEvent");
-		evt.initCustomEvent("add_plugin", true, true, this);
-		this.dispatchEvent(evt);
-    };
+    delay_component.attachedCallback = function(){};
 
     // Fires when an instance was removed from the document
     delay_component.detachedCallback = function(){
@@ -58,25 +52,30 @@
 	delay_component.init = function(ctx, bufsize){
 		this.audioCtx = ctx;
 		this.bufferSize = bufsize;
-		
+		//Create nodes
+		this.gainNodeIn = this.audioCtx.createGain();
+		this.gainNodeOut = this.audioCtx.createGain();
 		this.delayFilterNode = this.audioCtx.createDelay();
 		this.delayFilterNode.type = "delay";
 		this.gainNode = this.audioCtx.createGain();
+		//Connect nodes
+		this.gainNodeIn.connect(this.delayFilterNode);
+		this.gainNodeIn.connect(this.gainNodeOut);
 		this.delayFilterNode.connect(this.gainNode);
-		
+		this.gainNode.connect(this.gainNodeOut);
 		console.log("delay initialized");
 	}
 	
 	delay_component.connect = function(dest){
-		this.gainNode.connect(dest);
+		this.gainNodeOut.connect(dest);
 	}
 	
 	delay_component.getInput = function(){
-		return this.delayFilterNode;
+		return this.gainNodeIn;
 	}
 	
 	delay_component.getOutput = function(){
-		return this.gainNode;
+		return this.gainNodeOut;
 	}
 	
 	delay_component.disconnect = function(src, dest){
@@ -93,7 +92,7 @@
 		var slider_delay = {'id':'delay', 'min_value':0, 'max_value':1};
 		var activate_btn = {'id':'activate'};
 		var disable_btn = {'id':'disable'};
-		return {'name':'delay-plugin', 'input':1, 'output':1, 'slider':slider_delay, 'button1':activate_btn, 'button2':disable_btn};
+		return {'name':'delay-plugin','version':0.1, 'input':1, 'output':1, 'slider':slider_delay, 'button1':activate_btn, 'button2':disable_btn};
 	}
 
 	delay_component.setParam = function(param, val) {
