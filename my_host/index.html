@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Quicksand">
   <link rel="stylesheet" href="../css/soundboard.css"> 
 
-  
    <!-- Imports polyfill -->
   <script src="../bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
   
@@ -22,22 +21,15 @@
   <link rel="import" href="./oscillator.html">
   <link rel="import" href="./webdx7/dist/wam-webdx7.all.html">
 
-  
-
 </head>
 <body>
 	<header>
 		<span><a href="https://github.com/AurelienCURTI/pfe_plugins">Sound Board</a></span>
 		<audio src="https://mainline.i3s.unice.fr/mooc/guitarRiff1.mp3" id="soundSample" controls loop crossorigin="anonymous"></audio>
-
-		<p>
-			<span>MICRO</span>
-			<webaudio-switch src="img/switch_toggle.png" class="id" id="mic" height="28" width="50" alt="Press to record" title="Press to record"></webaudio-switch>
-		</p>
 	</header>
 
 	<div id="pedalboard-container">
-	<div id="pedalboard"></div>
+		<div id="pedalboard"></div>
 	</div>
 
 	<div class="div_app_tabs">
